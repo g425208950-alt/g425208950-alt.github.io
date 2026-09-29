@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 推送到 main 分支时自动部署。如果你的默认分支叫 master，改这里。
+  push:
+    branches: [main]
+  # 也可以在 Actions 页面手动点一下触发
+  workflow_dispatch:
+
+# 允许这个工作流读取仓库内容，并把构建产物发布到 Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只跑一个部署；排队中的旧任务不取消，避免发布到一半被打断
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # withastro/action 会自动：识别包管理器 → 安装依赖 → 构建 → 上传产物。
+      # 站点地址与 base 路径由 astro.config.mjs 从 GITHUB_REPOSITORY 自动推导，
+      # 所以这里不需要传 site / base。
+      - name: Install, build, and upload
+        uses: withastro/action@v6
+        with:
+          node-version: 24
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

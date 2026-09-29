@@ -1,0 +1,30 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { withBase } from '../utils/url';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>{SITE_TITLE}</h1>
+			<p>{SITE_DESCRIPTION}</p>
+			<p>
+				这个站点是用 <a href="https://astro.build/">Astro</a> 搭的：你只需要在
+				<code>src/content/blog/</code> 里放 Markdown 文件，推到 GitHub 之后，
+				GitHub Actions 会自动构建并发布到 GitHub Pages。
+			</p>
+			<p>
+				<a href={withBase('blog/')}>去看看文章 →</a>
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>

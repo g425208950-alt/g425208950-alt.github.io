@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { basePath, withBase } from '../utils/url';
+
+type Props = HTMLAttributes<'a'>;
+
+const { href, class: className, ...props } = Astro.props;
+
+// 调用方传进来的 href 是“不含 base”的站内路径（如 "/blog"），
+// 由 withBase 统一补上 base，这样项目站点下链接才不会 404。
+const resolvedHref = withBase(href ?? '');
+
+// 判断当前导航项是否处于激活状态；比较前先把 base 剥掉。
+const pathname = Astro.url.pathname.replace(basePath, '');
+const subpath = pathname.match(/[^\/]+/g);
+const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+---
+
+<a href={resolvedHref} class:list={[className, { active: isActive }]} {...props}>
+	<slot />
+</a>
+<style>
+	a {
+		display: inline-block;
+		text-decoration: none;
+	}
+	a.active {
+		font-weight: bolder;
+		text-decoration: underline;
+	}
+</style>

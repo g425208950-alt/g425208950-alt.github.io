@@ -58,3 +58,21 @@ grep -o 'href="/[^"]*"' dist/index.html | sort -u
 
 Posts live in `src/content/blog/<slug>.md`; the filename becomes the URL slug.
 Required frontmatter: `title`, `description`, `pubDate`. See `src/content.config.ts`.
+
+### Windows / filesystem constraints
+
+This repo lives on a Windows drive (`/mnt/d`, a 9p mount) and is also used through
+Windows git (PowerShell / Git Bash). Two rules follow from that:
+
+- **Never create symlinks in the repo.** Symlinks on the 9p mount are half-broken;
+  Windows git fails to read them with `error: open("x"): Function not implemented`,
+  which aborts `git add` entirely. To share content between files, use a real file
+  plus an `@path` import — that is why `CLAUDE.md` contains `@AGENTS.md` instead of
+  being a symlink. Check with `find . -type l -not -path "./node_modules/*"`.
+- **Keep line endings LF.** `.gitattributes` pins `* text=auto eol=lf`; do not
+  remove it. If a whole-file diff ever appears, run `git add --renormalize .`.
+  Never write CRLF into a text file.
+
+Note that `git status` can report a clean tree even when a file is unreadable,
+because it short-circuits on cached stat data. Run `git add -A` (or a build)
+before trusting that a checkout is healthy.

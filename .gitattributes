@@ -1,0 +1,22 @@
+# 统一换行符策略：所有文本文件在工作区和仓库里都用 LF。
+#
+# 为什么需要这个文件：
+# 这个仓库会同时被 Windows 侧的 git（PowerShell / Git Bash）和 WSL 侧的
+# 工具读写。Git for Windows 安装时经常把 core.autocrlf 设成 true，会在
+# 检出时把 LF 转成 CRLF、提交时再转回来；而 WSL 侧的工具按 LF 处理。
+# 两边不一致时，就会出现"整个文件都显示被修改、其实只差一个 \r"的假 diff，
+# 严重时还会让 GitHub Actions 里的构建脚本解析出错。
+#
+# `eol=lf` 的优先级高于任何人的 core.autocrlf 设置，所以不管谁在什么系统上
+# 克隆这个仓库，换行符都是确定的。
+* text=auto eol=lf
+
+# 二进制文件明确声明，避免 git 对它们做任何换行符转换
+*.ico   binary
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gif   binary
+*.webp  binary
+*.woff  binary
+*.woff2 binary

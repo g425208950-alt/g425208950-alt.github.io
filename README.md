@@ -172,15 +172,71 @@ git push
 - `SITE_URL` = `https://blog.example.com`
 - `BASE_PATH` = `/`
 
-本地想模拟带 base 的构建，可以：
+本地想模拟带 base 的构建，可以（按你用的终端选一种）：
+
+```powershell
+# PowerShell
+$env:SITE_URL="https://example.github.io"; $env:BASE_PATH="/blog"; npm run build
+```
+
+```bat
+:: CMD
+set SITE_URL=https://example.github.io && set BASE_PATH=/blog && npm run build
+```
 
 ```bash
+# Git Bash / WSL
 SITE_URL=https://example.github.io BASE_PATH=/blog npm run build
 ```
 
+> 注意：`变量=值 命令` 这种写法只有 bash 支持。在 PowerShell 里必须写成
+> `$env:变量="值"`，在 CMD 里必须写成 `set 变量=值`，否则会报
+> "无法将 xxx 识别为 cmdlet"。
+
 ---
 
-## 五、常见问题
+## 五、Windows 用户注意事项
+
+这个仓库同时在 Windows 和 WSL/Linux 下使用，已经做了两处针对性配置：
+
+**1. 换行符统一为 LF**（`.gitattributes`）
+
+Git for Windows 安装时经常把 `core.autocrlf` 设成 `true`，会在检出时把 LF 转成
+CRLF、提交时再转回来。如果两边处理不一致，就会出现"整个文件都显示被修改、
+其实只差一个 `\r`"的假 diff。
+
+本项目用 `.gitattributes` 里的 `* text=auto eol=lf` 钉死了这个行为 —— 它的
+优先级高于任何人本地的 `core.autocrlf`，所以不管谁在什么系统上克隆，换行符
+都是确定的。**不要删掉这个文件。**
+
+如果哪天你还是看到了莫名其妙的全文件 diff，跑一次：
+
+```bash
+git add --renormalize .
+```
+
+**2. 仓库里不能出现符号链接**
+
+符号链接在 Windows 的 `D:` 盘上（WSL 通过 9p 协议访问）是半残状态，Windows 侧
+的 git 读取时会直接报错：
+
+```
+error: open("xxx"): Function not implemented
+fatal: updating files failed
+```
+
+原来模板里的 `CLAUDE.md` 就是这种符号链接，已经改成用 `@AGENTS.md` 导入的普通
+文件。**以后不要用 `ln -s` 在仓库里建链接**；如果确实需要让多个文件共享内容，
+用「一个真文件 + 另一个文件里写 `@路径` 导入」的方式。
+
+---
+
+## 六、常见问题
+
+**`git add` 报错 `Function not implemented`**
+
+仓库里出现了符号链接，见上一节第 2 点。用 `find . -type l` 或
+`git ls-files -s | findstr 120000` 找出来，改成普通文件。
 
 **Actions 报错 `Get Pages site failed` / `Not found`**
 Settings → Pages → Source 没选成 `GitHub Actions`，回步骤 3。
@@ -202,10 +258,11 @@ Settings → Pages → Source 没选成 `GitHub Actions`，回步骤 3。
 
 ---
 
-## 六、目录结构
+## 七、目录结构
 
 ```
 ├── .github/workflows/deploy.yml   # 自动部署配置
+├── .gitattributes                 # 换行符策略（LF），不要删
 ├── public/                        # 原样拷贝的静态文件（favicon 等）
 ├── src/
 │   ├── assets/                    # 图片、字体（会被 Astro 优化）
@@ -215,6 +272,7 @@ Settings → Pages → Source 没选成 `GitHub Actions`，回步骤 3。
 │   ├── layouts/BlogPost.astro     # 文章页排版
 │   ├── pages/                     # 路由：每个文件对应一个网址
 │   ├── styles/global.css          # 全局样式
+│   ├── utils/url.ts               # base 路径工具（写链接用 withBase）
 │   └── consts.ts                  # ★ 站点信息
 └── astro.config.mjs               # 站点配置（site / base 自动推导）
 ```

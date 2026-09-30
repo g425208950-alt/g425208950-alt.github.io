@@ -2,6 +2,7 @@
 title: 起点
 description: 在这里写的第二篇博客（第一篇是deepseek写的，那个2024为日期的博客）
 pubDate: 2026-09-29
+draft: true
 ---
 
 ## 第二篇在这里写的博客

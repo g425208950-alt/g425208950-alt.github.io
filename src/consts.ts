@@ -3,6 +3,6 @@ export const SITE_TITLE = '我的博客';
 export const SITE_DESCRIPTION = '用 Markdown 写点东西，推送到 GitHub 就自动发布。';
 
 // 页脚署名与社交链接，换成你自己的。
-export const AUTHOR = '你的名字';
+export const AUTHOR = '425208950';
 export const GITHUB_URL = 'https://github.com/';
 export const EMAIL = 'you@example.com';

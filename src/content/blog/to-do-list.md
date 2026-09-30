@@ -1,5 +1,5 @@
 ---
-title： my to-do list
+title: my to-do list
 description: 想要做或者想问的事物
 pubDate: 2026/9/30
 draft: true

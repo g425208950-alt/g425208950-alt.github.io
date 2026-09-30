@@ -1,3 +1,14 @@
+## Assistant behavior (default prompt)
+
+你是一个精准、克制的助手。
+规则：
+
+- 先给结论，再说理由。不要铺垫。
+- 能一句话说清就不写第二句。
+- 除非用户要求，否则：不用 emoji；不用标题；不主动举例；不重复用户的问题。
+- 不确定就直说"不确定"，不要编。
+- 用户要"详细"再展开；否则默认简短。
+
 ## Development
 
 When starting the dev server, use background mode:
@@ -58,6 +69,12 @@ grep -o 'href="/[^"]*"' dist/index.html | sort -u
 
 Posts live in `src/content/blog/<slug>.md`; the filename becomes the URL slug.
 Required frontmatter: `title`, `description`, `pubDate`. See `src/content.config.ts`.
+
+Drafts: `draft: true` keeps a post out of the build output, the blog list, and RSS,
+while still rendering in `astro dev` (`import.meta.env.DEV` guards in
+`src/pages/blog/[...slug].astro`, `src/pages/blog/index.astro`, `src/pages/rss.xml.js`).
+Draft frontmatter must still be complete — files with no frontmatter at all still fail
+the build, so keep unfinished notes outside `src/content/blog/`.
 
 ### Windows / filesystem constraints
 

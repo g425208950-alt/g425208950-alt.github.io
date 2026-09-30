@@ -54,6 +54,7 @@ pubDate: 2024-03-01
 | ------------- | ---------------------------------------------------- |
 | `updatedDate` | 更新日期，写了会在标题下方多显示一行「最后更新于 …」 |
 | `heroImage`   | 封面图，路径相对当前文件，如 `../../assets/cover.jpg` |
+| `draft`       | 写了 `draft: true` 就是草稿，只在本地 `npm run dev` 可见，不会发布 |
 
 字段规则定义在 `src/content.config.ts`，想加标签（tags）之类的字段改那里。
 
@@ -65,7 +66,10 @@ pubDate: 2024-03-01
 
 Astro 会自动压缩、转成合适尺寸的 `webp`，不用你自己处理。
 
-**草稿**：把文件挪到 `src/content/` 以外的目录，或者先不 push，就不会被发布。
+**草稿**：在 frontmatter 里写 `draft: true`。文章只在本地 `npm run dev` 里可见，
+`npm run build` 不会给它生成页面，也不进列表页和 RSS，所以可以放心 commit / push。
+连 frontmatter 都还没写的半成品，放到 `src/content/blog/` 以外的目录（比如仓库根的
+`drafts/`），构建完全不会碰它。
 
 ---
 

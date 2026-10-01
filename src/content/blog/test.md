@@ -2,6 +2,8 @@
 title: Only for tests
 description: 测试页面
 pubDate: 2026-09-30
+heroImage: ../../assets/test-img1.png
+draft: true
 ---
 
-![image-20260930170629701](../../assets/image-20260930170629701.png)
+![img](../../assets/test-img1.png)

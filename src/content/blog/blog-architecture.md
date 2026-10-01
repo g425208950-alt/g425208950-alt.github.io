@@ -2,25 +2,38 @@
 title: 本博客架构解释
 description: 从使用场景切入讲述当前博客的架构，第一篇正式写的博客
 pubDate: 2026-09-30
-draft: true
 ---
 
-## 写博客的要点 (第一次用markdown写博客，给自己加一个快捷链接查用法)
+## <!--写博客的要点 (第一次用markdown写博客，给自己加一个快捷链接查用法)-->
 
-[Markdown写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)  （在Typora中需要ctrl + 鼠标左键）
+[Markdown写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)  
 
 ## 当前博客架构
 
 这是一个Astro静态博客，通过Github pages生成静态页面成为一个网页，域名是g425208950-alt.github.io，slug是markdown文件名称去掉md并且按照path规范后的路径，`[Markdown 写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)`中间的blog路径不是base，是路由段。
 
-
+---
 
 ## 我在刚搭建好时的疑惑
 
 1. github为这个网页提供了域名，那我不需要域名，不需要服务器就可以搭建这个博客，和购买域名和服务器搭建的博客网站相比有什么缺点？
+
+   答：1.没有自己购买域名的缺点，因为SEO（search engine optimization）大部分情况下忽视github.io这个域名，所以通常不会在其他用户搜索时被推荐；同时换用户名也代表换域名，传播性差。如果自己购买域名注册到github pages，可以了解以下知识：*购买的域名通常是apex Domain，即顶级域，也叫裸域，主域，顶级域需要注册SOA和NS，而注册了SOA和NS的域名无法再注册CNAME,所以通常只有子域名才可以写入CNAME*		2.没自己购买云服务器的缺点：因为github pages只支持静态页面，写死的CSS（cascading style sheets），html，javascript可以加载，但是如果需要后端，例如数据库，读取客户端的信息并给出回应等类似的功能就无法实现了。
+
+   > NS: NameServer;SOA: Start of Authority;CNAME: Canonical Name
+
 2. 例如打开Markdown用法速查时，浏览器路径为 `[Markdown 写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)`
    **g425208950-alt.github.io**是仓库名，**blog**是什么？仓库中第一层并没有blog目录。
-3. 在搭建这个博客时，我用的是WSL中的deepseek harness，现在不能用dsh提到的`npm run build`来查看Markdown的效果，是因为Windows缺少了什么吗？
+   
+   答：只是一个路由，首页（index）的路径是`https://g425208950-alt.github.io`。
+   
+3. 在搭建这个博客时，我用的是WSL中的deepseek harness，现在不能用dsh提到的`npm run build`构建来查看Markdown的效果，是因为Windows缺少了什么吗？
+
+   答：npm install会根据package.json来安装依赖，依赖安装在node_modules文件中，并且把详细配置写入package-lock.json，在WSL中安装时安装的依赖全都是Linux环境下的，到Windows环境下无法使用。另外，需要重装时可以用指令`npm ci`来根据package-lock.json重新安装（在package.json和pack-lock完全一致的情况下，会清空node_modules中已经安装的依赖并安装，否则直接退出）
+
+   > ci: continuous integration
+
+---
 
 ## AI草稿
 

@@ -2,6 +2,7 @@
 title: JSON 使用速查
 description: 以 package.json 为例看 JSON 的对象与数组，并顺带理清 JavaScript、Node 与宿主环境的关系。
 pubDate: 2026-09-30
+draft: true
 ---
 
 *package.json*

@@ -1,7 +1,7 @@
 ---
 title: Markdown 写作速查
 description: 写博客时最常用的 Markdown 语法，贴在手边随时查。
-pubDate: 2024-01-15
+pubDate: 2026-09-30
 ---
 
 这篇当备忘录用，忘了语法就翻出来看一眼。

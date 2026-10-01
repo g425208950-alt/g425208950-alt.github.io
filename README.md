@@ -42,7 +42,7 @@ src/content/blog/my-first-trip.md   →   /blog/my-first-trip/
 ---
 title: 文章标题
 description: 一句话摘要，会显示在列表页和搜索引擎结果里
-pubDate: 2024-03-01
+pubDate: 2026-10-01
 ---
 
 正文从这里开始，正常写 Markdown 就好。
@@ -150,7 +150,7 @@ git push
 ## 四、自定义
 
 | 想改什么                           | 改哪里                        |
-| ---------------------------------- | ----------------------------- |
+| :--------------------------------- | ----------------------------- |
 | 站点标题、描述、作者、GitHub / 邮箱 | `src/consts.ts`               |
 | 首页文案                           | `src/pages/index.astro`       |
 | 「关于」页面                       | `src/pages/about.astro`       |
@@ -176,7 +176,7 @@ git push
 - `SITE_URL` = `https://blog.example.com`
 - `BASE_PATH` = `/`
 
-本地想模拟带 base 的构建，可以（按你用的终端选一种）：
+本地想模拟带 base 的构建（按你的终端选一种）：
 
 ```powershell
 # PowerShell

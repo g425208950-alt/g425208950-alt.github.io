@@ -5,8 +5,20 @@ pubDate: 2026-10-01
 draft: true
 tags: 前端
 ---
-
+## Obsidian
+[[json-usage]]
+[[npm-usage]]
+[[html]]
 astro文件永远都有两个区域，是astro自己的"代码栅栏"
+
+## 一些缩写
+| 缩写  | 全称                                          |
+| --- | ------------------------------------------- |
+| RSS | Really Simple Syndication/Rich Site Summary |
+|     |                                             |
+
+
+
 
 *index.astro*
 

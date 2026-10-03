@@ -6,7 +6,9 @@ pubDate: 2026-10-1
 
 教程推荐：[HTML 教程 | 菜鸟教程](https://www.runoob.com/html/html-tutorial.html)
 
-<html lang="zh-CN"> 告诉浏览器语言是什么，lang是属性language，zh是语言码，CN是地区码。不写也能显示页面，但会影响SEO和无障碍。
+`<html lang="zh-CN">` 告诉浏览器语言是什么，lang是属性language，zh是语言码，CN是地区码。不写也能显示页面，但会影响SEO和无障碍。
+
+`<html meta charset="UTF-8">` 告诉浏览器编辑html内容的编码是什么，避免浏览器解析乱码。
 
 ## HTML版本
 

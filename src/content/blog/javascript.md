@@ -7,6 +7,15 @@ draft: true
 
 ## JavaScript关键词
 
+## 后缀
+
+| 后缀   | 全称             |
+| ---- | -------------- |
+| .mjs | ES Module(ESM) |
+| .csj | CommonJS(CJS)  |
+| .js  | JavaScript     |
+
+
 ### Node.js
 
 Node.js是一个运行环境(run time)，包含V8引擎和一大堆通过C++提供的接口，Node标准库 + libuv，libuv没有官方的名字。

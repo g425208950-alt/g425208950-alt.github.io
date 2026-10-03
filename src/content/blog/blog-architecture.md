@@ -4,7 +4,8 @@ description: 从使用场景切入讲述当前博客的架构，第一篇正式�
 pubDate: 2026-09-30
 draft: true
 ---
-
+## Obsidian
+[[Astro]]
 ## <!--写博客的要点 (第一次用markdown写博客，给自己加一个快捷链接查用法)-->
 
 [Markdown写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)  

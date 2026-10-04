@@ -2,7 +2,7 @@
 title: 你好，世界：这个博客终于开张了
 description: 用 Astro + GitHub Pages 搭一个纯 Markdown 的博客，第一篇当然要写清楚它是怎么跑起来的。
 pubDate: 2024-01-01
-heroImage: ../../assets/blog-placeholder-1.jpg
+heroImage: ../../../assets/blog-placeholder-1.jpg
 draft: true
 ---
 

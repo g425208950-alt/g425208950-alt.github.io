@@ -92,10 +92,10 @@ def fib(n):
 把图片放到 `src/assets/` 下，然后在 frontmatter 或者正文里引用：
 
 ```markdown
-![图片说明](../../assets/blog-placeholder-1.jpg)
+![图片说明](../../../assets/blog-placeholder-1.jpg)
 ```
 
-![图片说明](../../assets/blog-placeholder-1.jpg)
+![图片说明](../../../assets/blog-placeholder-1.jpg)
 
 Astro 会自动压缩和优化这些图片，构建时生成合适尺寸的 `webp`。
 

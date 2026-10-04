@@ -4,7 +4,12 @@ import { z } from 'astro/zod';
 
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+	// `**/` 会递归到子目录，附件目录里的 .md（Excalidraw 的 xxx.excalidraw.md）
+	// 也会被当成文章，这里用 `!` 取反排除掉。
+	loader: glob({
+		base: './src/content/blog',
+		pattern: ['**/*.{md,mdx}', '!attachment/**'],
+	}),
 	// Type-check frontmatter using a schema
 	schema: ({ image }) =>
 		z.object({

@@ -6,6 +6,9 @@ draft: true
 ---
 ## Obsidian
 [[Astro]]
+[javascript](javascript.md)
+
+
 ## <!--写博客的要点 (第一次用markdown写博客，给自己加一个快捷链接查用法)-->
 
 [Markdown写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)  
@@ -13,6 +16,12 @@ draft: true
 ## 当前博客架构
 
 这是一个Astro静态博客，通过Github pages生成静态页面成为一个网页，域名是g425208950-alt.github.io，slug是markdown文件名称去掉md并且按照path规范后的路径，`[Markdown 写作速查](https://g425208950-alt.github.io/blog/markdown-cheatsheet/)`中间的blog路径不是base，是路由段。
+
+### 架构精读
+
+- package.json：只关心两处——`"scripts"` 里 `build` 映射到 `astro build`，`"dependencies"` 列出装了哪些包。`"type": "module"` 决定 `.js` 文件按 ESM 解析。读的时候问自己：`npm run build` 到底执行了什么。
+- astro.config.mjs: 
+
 
 ---
 

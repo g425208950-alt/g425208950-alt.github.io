@@ -6,6 +6,7 @@ import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { postSlug } from '../../utils/post';
 import { withBase } from '../../utils/url';
 
 const showDrafts = import.meta.env.DEV;
@@ -97,7 +98,7 @@ const posts = (await getCollection('blog'))
 					{
 						posts.map((post) => (
 							<li>
-								<a href={withBase(`blog/${post.id}/`)}>
+								<a href={withBase(`blog/${postSlug(post)}/`)}>
 									{post.data.heroImage && (
 										<Image width={720} height={360} src={post.data.heroImage} alt="" />
 									)}

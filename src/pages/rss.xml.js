@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { postSlug } from '../utils/post';
 import { basePath, withBase } from '../utils/url';
 
 export async function GET(context) {
@@ -16,7 +17,7 @@ export async function GET(context) {
 		items: published.map((post) => ({
 			...post.data,
 			// link 是绝对路径，@astrojs/rss 会相对 site 解析它。
-			link: withBase(`blog/${post.id}/`),
+			link: withBase(`blog/${postSlug(post)}/`),
 		})),
 	});
 }

@@ -1,6 +1,8 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+// 只取文件名当 slug，这样把 md 归类到子文件夹不会改变线上 URL。
+import { postSlug } from '../../utils/post';
 
 export async function getStaticPaths() {
 	// 本地开发时让草稿也能预览，正式构建（astro build）时草稿不生成页面。
@@ -9,7 +11,7 @@ export async function getStaticPaths() {
 		(post) => import.meta.env.DEV || !post.data.draft,
 	);
 	return posts.map((post) => ({
-		params: { slug: post.id },
+		params: { slug: postSlug(post) },
 		props: post,
 	}));
 }

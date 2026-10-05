@@ -41,6 +41,10 @@ const site = process.env.SITE_URL ?? (owner ? `https://${owner}.github.io` : 'ht
 const base = process.env.BASE_PATH ?? (repoName && !isUserSite ? `/${repoName}` : '/');
 ```
 
+使用到的Github注入的环境变量：`GITHUB_REPOSITORY`（Github代码仓库名）、`GITHUB_REPOSITORY_OWNER`(Github用户名)
+
+自己手动注入的环境变量（可选）：`SITE_URL``BASE_PATH` 形式：`SITE_URL=https://my-domain.com BASE_PATH=/ npm run build`
+
 `astro.config.mjs :37-65`
 
 ```javascript
@@ -76,13 +80,11 @@ export default defineConfig({
 
 ```
 
-使用到的Github注入的环境变量：`GITHUB_REPOSITORY`（Github代码仓库名）、`GITHUB_REPOSITORY_OWNER`(Github用户名)
 
-自己手动注入的环境变量（可选）：`SITE_URL``BASE_PATH` 形式：`SITE_URL=https://my-domain.com BASE_PATH=/ npm run build`
 
 *index.astro*
 
-```as
+```astro
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -117,7 +119,7 @@ import { withBase } from '../utils/url';
 
 *BaseHead.astro*
 
-```
+```astro
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.

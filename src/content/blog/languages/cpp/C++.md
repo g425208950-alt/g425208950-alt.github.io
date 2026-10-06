@@ -56,7 +56,6 @@ concept Addable = requires(T a, T b) { a + b; };// 要求必须能满足函数�
 ```
 
 
-
 ### concept
 `concept` 是 C++20 新增的关键字，跟 requires 同期。
 ```c++
@@ -76,3 +75,10 @@ T add(T a, T b);
 Addable auto add(Addable auto a, Addable auto b);//这种 `Concept auto` 组合是合法的，但它整体是另一个语法，不是你那行。
 ```
 
+## C++23
+```c++
+auto func(this auto&& self, 其他参数)
+```
+传统写法里，成员函数隐式带一个 this，函数体内用 `this->xxx` 或直接写成员名访问自己，但你没法给这个 this 起名字。新语法把它摊开成一个真正的参数。
+第一个参数位置的 `this auto&& self` 就是那个"自己"。`this` 是关键字，标记"这个参数是对象本身，不是普通参数"；`auto&&` 是类型推导，`self` 是你取的名字，函数体里就用 `self` 访问自己。
+为什么是 `auto&&`。`auto&&` 是转发引用，能接住任意 value category：左值对象调用时自推成左值引用，右值对象调用时成右值引用，const 也一并带上。这就让它对 const/非const、左值/右值四种组合都能工作，等价于同时写出 & 、const&、&&、const&& 四个重载。传统要写四份的活，这里一份搞定。

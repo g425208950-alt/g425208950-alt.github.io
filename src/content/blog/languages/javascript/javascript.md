@@ -8,7 +8,7 @@ draft: true
 
 ### ECMAScript
 
-ECMAScript是语言规范，ESM是其中一章。
+ECMA的全称是“European Computer Manufacturers Association”，中文名称为“欧洲计算机制造商协会”。ECMAScript是语言规范，ESM是其中一章。
 ### ESM是什么 
 
 ECMAScript Modules，JS 官方的模块标准，用 `import`/`export` 语法。

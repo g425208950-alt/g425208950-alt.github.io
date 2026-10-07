@@ -23,6 +23,20 @@ CSS 的每一条规则都是同一个形状：
 ```css
 selector { property: value; }
 ```
+## 选择器
+
+`ul > li > a` 是一条CSS选择器，`>`叫 子代组合器，空格是后代组合器。
+它的作用有三层。一是定位元素，从 DOM 里挑出要改的那些；常见的几类有元素选择器 `a`、类选择器 `.title`、ID 选择器 `#main`、属性选择器 `[type="text"]`、伪类 `:hover`、伪元素 `::before`。二是决定优先级，当多条规则命中同一个元素又互相冲突时，浏览器按选择器的**特异性**算权重，越具体的越赢，`#id .cls a` 就比单个 `a` 强。三是它同时也是 JavaScript 的查询语言，`document.querySelector('ul > li > a')` 用的就是同一套语法，所以你只学一次，CSS 和 JS 都能使。
+```html
+<ul>
+  <li>
+    <a href="/blog/hello-world/">文章标题</a>
+  </li>
+  <li>
+    <a href="/blog/css/">另一篇</a>
+  </li>
+</ul>
+```
 ## 语法
 ### 伪类
 伪类写一个冒号

@@ -10,18 +10,60 @@ import { withBase } from '../utils/url';
 <html lang="zh-CN">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+				<style>
+			/* 只调排版层次：留白、行宽、引言、入口按钮 */
+
+			main {
+				padding-top: 5em;
+			}
+
+			/* 标题下面那行描述，做成引言的样子 */
+			main > p:first-of-type {
+				font-size: 1.25em;
+				line-height: 1.6;
+				color: rgb(var(--gray));
+				margin-bottom: 2.5rem;
+			}
+
+			/* 正文段落：限制行宽，拉开段间距 */
+			main > p {
+				max-width: 60ch;
+				margin: 0 0 1.5rem 0;
+			}
+
+			/* 入口链接做成按钮 */
+			main a.cta {
+				display: inline-block;
+				margin-top: 1rem;
+				padding: 0.7em 1.6em;
+				border-radius: 999px;
+				background: rgb(var(--accent));
+				color: #aa0d0d;
+				font-size: 0.95em;
+				text-decoration: none;
+				transition:
+					transform 0.15s ease,
+					box-shadow 0.15s ease;
+			}
+			main a.cta:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 18px rgba(var(--gray), 0.35);
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>Welcome!</h1>
-			<p>{SITE_DESCRIPTION}</p>
-			<p>
-				这个站点是用 <a href="https://astro.build/">Astro</a> 搭的。
-			</p>
-			<p>
-				<a href={withBase('blog/')}>去看看文章 →</a>
-			</p>
+			<div class="intro">
+				<h1>Welcome!</h1>
+				<p>{SITE_DESCRIPTION}</p>
+				<p>
+					这个站点是用 <a href="https://astro.build/">Astro</a> 搭的。
+				</p>
+				<p>
+					<a class="cta" href={withBase('blog/')}>去看看文章 →</a>
+				</p>
+			</div>
 		</main>
 		<Footer />
 	</body>

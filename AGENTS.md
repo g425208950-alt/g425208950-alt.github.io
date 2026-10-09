@@ -81,7 +81,7 @@ the build, so keep unfinished notes outside `src/content/blog/`.
 ### Windows / filesystem constraints
 
 This repo lives on a Windows drive (`/mnt/d`, a 9p mount) and is also used through
-Windows git (PowerShell / Git Bash). Two rules follow from that:
+Windows git (PowerShell / Git Bash). Three rules follow from that:
 
 - **Never create symlinks in the repo.** Symlinks on the 9p mount are half-broken;
   Windows git fails to read them with `error: open("x"): Function not implemented`,
@@ -91,6 +91,14 @@ Windows git (PowerShell / Git Bash). Two rules follow from that:
 - **Keep line endings LF.** `.gitattributes` pins `* text=auto eol=lf`; do not
   remove it. If a whole-file diff ever appears, run `git add --renormalize .`.
   Never write CRLF into a text file.
+- **Run npm on the Windows side only.** `node_modules/` is one directory shared by
+  both environments, but native binaries are platform-specific (rolldown, sharp).
+  Installing from WSL writes linux-x64 binaries and breaks the Windows side, and
+  the reverse is also true — the build then dies with
+  `Cannot find native binding ... @rolldown/binding-<platform>`. So `npm install`,
+  `npm run dev` and `npm run build` belong to Windows. The WSL side does file edits,
+  git and text search only, which means it **cannot verify a build**: after changing
+  styles or components, ask the human to run the build/dev server and report back.
 
 Note that `git status` can report a clean tree even when a file is unreadable,
 because it short-circuits on cached stat data. Run `git add -A` (or a build)

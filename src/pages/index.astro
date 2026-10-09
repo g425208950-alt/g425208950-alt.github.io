@@ -10,44 +10,57 @@ import { withBase } from '../utils/url';
 <html lang="zh-CN">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-				<style>
-			/* 只调排版层次：留白、行宽、引言、入口按钮 */
+		<style>
+			/* 只作用于首页：留白、排版层次、入口按钮 */
 
 			main {
-				padding-top: 5em;
+				padding-top: 6rem;
+				padding-bottom: 6rem;
+			}
+
+			/* 标题：只收紧字距、加重字重，字号交给 global.css */
+			main h1 {
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				margin-bottom: 1rem;
 			}
 
 			/* 标题下面那行描述，做成引言的样子 */
 			main > p:first-of-type {
-				font-size: 1.25em;
-				line-height: 1.6;
+				font-size: 1.15rem;
+				line-height: 1.7;
 				color: rgb(var(--gray));
-				margin-bottom: 2.5rem;
+				max-width: 44ch;
+				margin-bottom: 3rem;
 			}
 
 			/* 正文段落：限制行宽，拉开段间距 */
 			main > p {
 				max-width: 60ch;
-				margin: 0 0 1.5rem 0;
+				margin: 0 0 1.25rem 0;
 			}
 
 			/* 入口链接做成按钮 */
 			main a.cta {
 				display: inline-block;
-				margin-top: 1rem;
-				padding: 0.7em 1.6em;
+				margin-top: 1.5rem;
+				padding: 0.75em 1.75em;
 				border-radius: 999px;
-				background: rgb(var(--accent));
-				color: #aa0d0d;
-				font-size: 0.95em;
+				background: var(--accent);
+				color: #fff;
+				font-size: 0.95rem;
+				font-weight: 600;
 				text-decoration: none;
+				box-shadow: 0 4px 14px rgba(var(--gray), 0.3);
 				transition:
 					transform 0.15s ease,
-					box-shadow 0.15s ease;
+					box-shadow 0.15s ease,
+					filter 0.15s ease;
 			}
 			main a.cta:hover {
 				transform: translateY(-2px);
-				box-shadow: 0 6px 18px rgba(var(--gray), 0.35);
+				filter: brightness(1.1);
+				box-shadow: 0 10px 24px rgba(var(--gray), 0.4);
 			}
 		</style>
 	</head>
@@ -58,10 +71,10 @@ import { withBase } from '../utils/url';
 				<h1>Welcome!</h1>
 				<p>{SITE_DESCRIPTION}</p>
 				<p>
-					这个站点是用 <a href="https://astro.build/">Astro</a> 搭的。
+					这个站点用的框架是 <a href="https://astro.build/">Astro</a> 。
 				</p>
 				<p>
-					<a class="cta" href={withBase('blog/')}>去看看文章 →</a>
+					<a class="cta" href={withBase('blog/')}>看看文章</a>
 				</p>
 			</div>
 		</main>

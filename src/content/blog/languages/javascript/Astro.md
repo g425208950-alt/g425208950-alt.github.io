@@ -173,4 +173,5 @@ const rssUrl = new URL(withBase('rss.xml'), Astro.site);
 <meta name="twitter:card" content="summary_large_image" />
 
 ```
-
+### 待整理
+Astro（以及 React、Vue 这一类）把"导入的组件变量"直接当标签用，这是框架提供的语法，不是 HTML 本身的标签。BaseHead

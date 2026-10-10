@@ -7,7 +7,7 @@ tags: 前端
 ---
 ## Obsidian
 [[json-usage]]
-[[npm-usage]]
+[[npm]]
 [[html]]
 [blog-architecture](blog-architecture.md)
 
@@ -19,6 +19,10 @@ astro文件永远都有两个区域，是astro自己的"代码栅栏"
 | RSS | Really Simple Syndication/Rich Site Summary |
 | MDX | Markdown + JSX                              |
 | JSX | Javascript XML                              |
+| CSR | Client-Side Rendering                       |
+| SSR | Server-Side Rendering                       |
+| SSG | Static Site Generation                      |
+| RSC | React Server Components                     |
 ## 一些命名方法
 
 [Naming-Conventions](Naming-Conventions.md)

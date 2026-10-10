@@ -81,7 +81,7 @@ the build, so keep unfinished notes outside `src/content/blog/`.
 ### Windows / filesystem constraints
 
 This repo lives on a Windows drive (`/mnt/d`, a 9p mount) and is also used through
-Windows git (PowerShell / Git Bash). Three rules follow from that:
+Windows git (PowerShell / Git Bash). Four rules follow from that:
 
 - **Never create symlinks in the repo.** Symlinks on the 9p mount are half-broken;
   Windows git fails to read them with `error: open("x"): Function not implemented`,
@@ -99,6 +99,14 @@ Windows git (PowerShell / Git Bash). Three rules follow from that:
   `npm run dev` and `npm run build` belong to Windows. The WSL side does file edits,
   git and text search only, which means it **cannot verify a build**: after changing
   styles or components, ask the human to run the build/dev server and report back.
+- **A WSL edit may never reach the Windows dev server's watcher.** Vite invalidates
+  cached CSS modules from file-watch events, and watching across the WSL/Windows
+  boundary is unreliable. The result is a misleading split: the dev server re-reads
+  the `.astro` file per request, so **new markup appears while the old CSS keeps
+  being served** — layouts, colours and `<style>` edits silently do nothing. When a
+  human reports "my change had no effect", do not debug the CSS in that state. Ask
+  them to stop and restart `npm run dev` and hard-refresh the browser
+  (Ctrl+Shift+R) first; only suspect the code if a restart changes nothing.
 
 Note that `git status` can report a clean tree even when a file is unreadable,
 because it short-circuits on cached stat data. Run `git add -A` (or a build)

@@ -1,12 +1,11 @@
 ---
-import { SITE_TITLE } from '../consts';
-import { basePath } from '../utils/url';
 import HeaderLink from './HeaderLink.astro';
 ---
 
 <header>
 	<nav>
-		<h2><a href={basePath}>{SITE_TITLE}</a></h2>
+		<!-- 站点名先不显示（还没有 logo）。navbar 用三栏网格，中间那栏放导航链接；
+		     等做好 logo，在这里插一个元素并让它落进第一栏即可。 -->
 		<div class="internal-links">
 			<HeaderLink href="/">首页</HeaderLink>
 			<HeaderLink href="/blog">文章</HeaderLink>
@@ -21,31 +20,28 @@ import HeaderLink from './HeaderLink.astro';
 		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
 	/* 用三栏网格而不是 flex：左右两栏各占一份、中间那栏自然居中。
-	   这样即使没有社交图标，导航链接也仍然停在原来居中的位置。
-	   （若用 justify-content: space-between，删掉第三个子元素后
-	   链接会被推到最右边。） */
+	   删掉站点名之后导航链接只剩自己一个子元素，若不显式指定栏位，
+	   它会自动落进第一栏跑到最左边去——所以下面钉死在第 2 栏。 */
 	nav {
 		display: grid;
 		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
 	}
+
+	.internal-links {
+		grid-column: 2;
+	}
+
 	nav a {
 		padding: 1em 0.5em;
-		/* --black 的值是 "15, 18, 25" 这种分量列表，必须套在 rgb() 里才是合法颜色 */
+		/* --black 的值是 "31, 35, 40" 这种分量列表，必须套在 rgb() 里才是合法颜色 */
 		color: rgb(var(--black));
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
+
 	nav a.active {
 		text-decoration: none;
 		border-bottom-color: var(--accent);

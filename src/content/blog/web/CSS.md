@@ -57,7 +57,12 @@ main > p:first-of-type
 ### 伪元素
 伪元素写两个冒号
 伪元素不是一个真实存在的标签，是 CSS 凭空生成的一小块内容，用来给元素的某个部分套样式。写法是双冒号，常见的有 `::before`、`::after`（在元素内部的前/后插入内容，要配合 `content` 用）、`::first-line`、`::first-letter`（选中首行、首字母）、`::placeholder`、`::selection`（选中文字的高亮）、`::marker`（列表项符号）。
-## btw
+## Sass
+全称***syntactically Awesome Stylesheets***
+### scss
+
+SCSS是Sass的一种语法，Sass是CSS的***预处理器***,它补上了 CSS 缺的几样东西：变量、嵌套、mixin（可复用且能带参数的样式片段）、`@extend`、`@use` 拆分文件，以及 `@if`/`@each`/`@for` 这类控制流，所以能用循环批量生成样式。注意它是 **CSS 的超集**，合法的 CSS 本身就是合法的 SCSS。
+## 未整理
 ***SVG*** 的全称是 Scalable Vector Graphics，可缩放矢量图形，一种基于 XML 的二维图形格式。它和 PNG/JPG 的根本差别在"怎么存"：PNG 存的是**像素网格**，每个点记一个颜色，所以放大就糊、文件大小随尺寸暴涨；SVG 存的是**几何描述**——一堆点、线、曲线、填充色的指令，浏览器收到后按当前尺寸实时画出来，所以放大多少都清晰，这也是它适合做图标的原因。SVG 有两种用法：作为独立文件（你的 `public/favicon.svg`，用 `<img>` 或 `<link rel="icon">` 引用），或者**内联**成 HTML 里的 `<svg>...</svg>` 元素（你 Header.astro 里的 GitHub 图标和 RSS 图标就是）。内联的那种是 DOM 的一部分，能被 CSS 选中、也能用 `fill` 和 `stroke` 上色——你的图标写的是 `fill="currentColor"`，意思是"用当前文字颜色填充"，所以鼠标悬停时文字变灰、图标跟着变，这不是 JS 干的，是 CSS 的 `color` 继承下来的。
 
 ***"全局扁平"是什么意思***

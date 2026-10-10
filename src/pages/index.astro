@@ -1,9 +1,44 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { postSlug } from '../utils/post';
 import { withBase } from '../utils/url';
+
+const showDrafts = import.meta.env.DEV;
+
+// post.id 是「相对 src/content/blog 的路径，不带扩展名」，例如
+// languages/javascript/vue，所以第一段就是分类名。
+const posts = (await getCollection('blog')).filter(
+	(post) => showDrafts || !post.data.draft,
+);
+
+const byCategory = new Map();
+for (const post of posts) {
+	const slash = post.id.indexOf('/');
+	const category = slash === -1 ? 'uncategorized' : post.id.slice(0, slash);
+	if (!byCategory.has(category)) byCategory.set(category, []);
+	byCategory.get(category).push(post);
+}
+
+// 每个分类取最新 5 篇：卡片高度因此不一样，瀑布感才出得来。
+const PER_CARD = 5;
+
+const categories = [...byCategory.entries()]
+	.map(([name, items]) => {
+		const sorted = items.sort(
+			(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+		);
+		return {
+			name,
+			count: items.length,
+			latest: sorted.slice(0, PER_CARD),
+			rest: Math.max(0, items.length - PER_CARD),
+		};
+	})
+	.sort((a, b) => b.count - a.count);
 ---
 
 <!doctype html>
@@ -11,71 +46,124 @@ import { withBase } from '../utils/url';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* 只作用于首页：留白、排版层次、入口按钮 */
+			/* 深色只覆盖这一页的 body。Astro 的作用域样式会给 body 加上
+			   data-astro-cid 属性，特异性高于 global.css 里的 body 规则，
+			   所以不用改 global.css 就能只让首页变暗。
+			   颜色取自 GitHub 深色主题（Primer 的 color-modes.css）：
+			   bgColor-default #0d1117 / bgColor-muted #151b23 /
+			   fgColor-default #f0f6fc / fgColor-muted #9198a1 /
+			   borderColor-default #3d444d / fgColor-accent #4493f8 */
+			body {
+				/* background 是简写，会顺带清掉 global.css 的顶部渐变 */
+				background: #0d1117;
+				color: #f0f6fc;
+			}
 
 			main {
-				padding-top: 6rem;
-				padding-bottom: 6rem;
+				width: 1100px;
+				max-width: calc(100% - 2em);
+				margin: 0 auto;
+				padding: 3rem 1em 5rem;
 			}
 
-			/* 标题：只收紧字距、加重字重，字号交给 global.css */
-			main h1 {
-				font-weight: 800;
-				letter-spacing: -0.02em;
-				margin-bottom: 1rem;
+			/* 多列瀑布：卡片不等高也能自然铺满每一列 */
+			.columns {
+				columns: 3;
+				column-gap: 1.25rem;
 			}
 
-			/* 标题下面那行描述，做成引言的样子 */
-			main > p:first-of-type {
-				font-size: 1.15rem;
-				line-height: 1.7;
-				color: rgb(var(--gray));
-				max-width: 44ch;
-				margin-bottom: 3rem;
+			.card {
+				/* 关键：禁止一张卡片被拆到相邻两列去 */
+				break-inside: avoid;
+				margin: 0 0 1.25rem;
+				padding: 1.25rem 1.4rem;
+				background: #151b23;
+				border: 1px solid #3d444d;
+				border-radius: 10px;
 			}
 
-			/* 正文段落：限制行宽，拉开段间距 */
-			main > p {
-				max-width: 60ch;
-				margin: 0 0 1.25rem 0;
+			/* global.css 把 h1~h6 设成了近黑色，深色底上必须逐项覆盖 */
+			.card h2 {
+				margin: 0 0 0.35rem;
+				font-size: 1.25rem;
+				letter-spacing: 0;
+				color: #f0f6fc;
 			}
 
-			/* 入口链接做成按钮 */
-			main a.cta {
-				display: inline-block;
-				margin-top: 1.5rem;
-				padding: 0.75em 1.75em;
-				border-radius: 999px;
-				background: var(--accent);
-				color: #fff;
-				font-size: 0.95rem;
-				font-weight: 600;
+			.count {
+				margin: 0 0 0.9rem;
+				font-size: 0.8rem;
+				color: #9198a1;
+			}
+
+			.card ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			.card li {
+				margin-bottom: 0.45rem;
+				font-size: 0.9rem;
+				line-height: 1.45;
+			}
+
+			.card li:last-child {
+				margin-bottom: 0;
+			}
+
+			.card a {
+				color: #4493f8;
 				text-decoration: none;
-				box-shadow: 0 4px 14px rgba(var(--gray), 0.3);
-				transition:
-					transform 0.15s ease,
-					box-shadow 0.15s ease,
-					filter 0.15s ease;
 			}
-			main a.cta:hover {
-				transform: translateY(-2px);
-				filter: brightness(1.1);
-				box-shadow: 0 10px 24px rgba(var(--gray), 0.4);
+
+			.card a:hover {
+				text-decoration: underline;
+			}
+
+			.rest {
+				margin: 0.9rem 0 0;
+				font-size: 0.8rem;
+				color: #9198a1;
+			}
+
+			@media (max-width: 900px) {
+				.columns {
+					columns: 2;
+				}
+			}
+
+			@media (max-width: 600px) {
+				.columns {
+					columns: 1;
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<div class="intro">
-				<h1>Welcome!</h1>
-				<p>{SITE_DESCRIPTION}</p>
-				<p>
-					这个站点用的框架是 <a href="https://astro.build/">Astro</a> 。
-				</p>
-				<p>
-					<a class="cta" href={withBase('blog/')}>看看文章</a>
-				</p>
+			<!-- 页面上不放可见的大标题（站点名已在 Header 里），
+			     但保留一个 h1 给屏幕阅读器和搜索引擎 -->
+			<h1 class="sr-only">{SITE_TITLE}</h1>
+
+			<div class="columns">
+				{
+					categories.map((cat) => (
+						<section class="card">
+							<h2>{cat.name}</h2>
+							<p class="count">{cat.count} 篇</p>
+							<ul>
+								{cat.latest.map((post) => (
+									<li>
+										<a href={withBase(`blog/${postSlug(post)}/`)}>{post.data.title}</a>
+									</li>
+								))}
+							</ul>
+							{cat.rest > 0 && <p class="rest">还有 {cat.rest} 篇…</p>}
+						</section>
+					))
+				}
 			</div>
 		</main>
 		<Footer />

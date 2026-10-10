@@ -12,23 +12,30 @@ root前面为什么加冒号：
 :root 前面那个冒号表示它是伪类。伪类不是标签名，而是"状态"或"特殊位置"的限定词，语法上必须带冒号才能和标签名区分开。root 并不是某个 HTML 标签（HTML 里没有 <root> 元素），它是规范预定的关键字，意思是"文档的根元素"，在 HTML 里指的就是 <html>，所以 :root { } 和 html { } 效果相同。用前者的原因有两个：伪类在优先级上按"类"这一档计算，比标签名高一档，不容易被别处的 html { } 盖掉；以及语义更明确，一看就知道这是全站的根。
 */
 :root {
-	--accent: #2a14ec;
-	--accent-dark: #2a8a27;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
+	/* 配色全部取自 GitHub Primer 浅色主题（@primer/css 的 color-modes.css）：
+	   fgColor-default #1f2328 / fgColor-muted #59636e /
+	   fgColor-accent #0969da / borderColor-default #d1d9e0 */
+	--accent: #0969da; /* 链接与强调色 */
+	--accent-dark: #0550ae; /* 深一档的蓝，目前代码里没引用 */
+	--black: 31, 35, 40; /* #1f2328，标题 */
+	--gray: 89, 99, 110; /* #59636e，次要文字与阴影 */
+	--gray-light: 209, 217, 224; /* #d1d9e0，边框与分隔线 */
+	--gray-dark: 31, 35, 40; /* #1f2328，正文 */
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
+
+	/* GitHub 的系统字体栈，末尾补上中文字体兜底。
+	   想找回模板自带的 Atkinson，把 var(--font-atkinson) 加回最前面即可。 */
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC',
+		'Microsoft YaHei', Helvetica, Arial, sans-serif;
+
 	--box-shadow:
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
 }
 
 body {
-	/* Atkinson 只覆盖拉丁字符，中文这里补上各平台常见的中文字体作为兜底 */
-	font-family:
-		var(--font-atkinson), 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
-		'Source Han Sans SC', 'Noto Sans CJK SC', sans-serif;
+	font-family: var(--font-sans);
 	margin: 0;
 	padding: 0;
 	text-align: left;

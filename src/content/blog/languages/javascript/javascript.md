@@ -3,8 +3,11 @@ title: JavaScript学习
 description: 简单学一下JavaScript，还包含TypeScript知识
 pubDate: 2026-10-1
 draft: true
+aliases:
+  - JS
 ---
 [js-mdx-toolkit](js-mdx-toolkit.md)
+[TypeScript](TypeScript.md)
 
 ### ECMAScript
 
@@ -66,6 +69,8 @@ type C = IsNever2<string>;   // false
 ### default
 
 是ESM标准定义的，表示这个文件默认export default修饰的***值***
+### import 
+import后面的内容如果有花括号，是***命名导入***，如果没有花括号则是***默认导入***，命名导入的名字必须和对方export时写的一致。
 ## TypeScript关键字
 
 ### declare
@@ -176,8 +181,26 @@ extends 相当于 C++的 require std::derived_from<Tocales, locales>，只接受
 ### 返回类型
 圆括号后面的`:`后面的类型就是返回值类型
 
+### => 箭头函数
+`=>` 是箭头函数，写法是 `参数 => 返回值`,等价于一个匿名函数。与普通函数不同的点是箭头函数没有`this`
+## 解构
+解构是 JavaScript 的语法，ES6（2015）引入的。作用是从数组或对象里，按位置或键名把值批量取出来，赋给变量。
+```js
+const arr = [1, 2, 3];
+const [a, b] = arr;   // a=1, b=2
 
+const obj = { x: 10, y: 20 };
+const { x, y } = obj;   // x=10, y=20（变量名必须和键名对上）
+const { x: first } = obj;  // 想改名就写 x: first，first=10
+```
 ## 后缀
+### '.d.ts'
+`.d.ts` 是 TypeScript 的类型声明文件，d 是 declaration（声明）。
+
+它只描述类型和接口，不含任何实现代码，也不会被编译成 js。作用是给已有的 js 代码或外部模块补一份类型说明，让 TS 能检查和提示。
+
+跟 `.ts` 的区别就是：`.ts` 有实现、会编译；`.d.ts` 只有类型、不参与编译。
+## 缩写
 
 | 后缀   | 全称                                          |
 | ---- | ------------------------------------------- |

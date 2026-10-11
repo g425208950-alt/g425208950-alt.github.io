@@ -4,5 +4,5 @@ export const SITE_DESCRIPTION = "A foolish college student's blog (🚧🚧Under
 
 
 export const AUTHOR = '425208950';
-export const GITHUB_URL = 'https://github.com/';
+export const GITHUB_URL = 'https://github.com/g425208950-alt';
 export const EMAIL = 'g425208950@gmail.com';

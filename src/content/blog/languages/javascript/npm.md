@@ -23,3 +23,5 @@ npm 5 以后 `npm install` 默认就写进 `package.json`，`--save` 成了默�
 
 ## npx
 `npx` 本质上是 `npm exec` 的简写。
+`npm`和`npx`职责上要分开看。npm 管**依赖**：安装、卸载、升级，查看依赖树（`npm ls`）、检查漏洞（`npm audit`）、发布（`npm publish`）。它还会**跑脚本**：`npm run dev` 会读 `package.json` 的 `scripts` 字段，把里面写的命令执行掉。npx 只管一件事：**执行某个包提供的命令行工具**，而且不需要事先全局安装。npm 7 之后 npx 就是 `npm exec` 的别名，`npx astro dev` 和 `npm exec astro dev` 完全等价。
+**`npm run` 之所以能跑 `astro dev`，是因为 npm 在跑脚本前临时把 `node_modules/.bin` 加进了 PATH**。这正是 npx 帮你做的事。所以 `npm run dev` 里的 `astro`、`npx astro`、以及直接写 `node_modules/.bin/astro`，三者最终调用的是同一个文件。再补一组等价关系：`npm run dev`（脚本内容是 `astro dev`）、`npx astro dev`、`npm exec astro dev` 是同一条命令的不同写法；而 `npm create astro@latest` 是 `npm init astro@latest` 的别名，等价于 `npx create-astro@latest`，都表示「临时下载这个脚手架跑一次」。

@@ -51,8 +51,8 @@ ps: 本文内容有部分内容引用自菜鸟教程
 | ------ | ------------------------------------------------------- |
 | DTD    | Document Type Definition                                |
 | W3C    | World Wide Web Consortium                               |
-| WHATWG | Web Hypertext Application Techonology Working Group     |
-| SGML   | Standard Generalized Markup language（XML是其简化子集） |
+| WHATWG | Web Hypertext Application Technology Working Group      |
+| SGML   | Standard Generalized Markup Language（XML是其简化子集） |
 | DOM    | Document Object Model                                   |
 |        |                                                         |
 |        |                                                         |
@@ -64,7 +64,7 @@ ps: 本文内容有部分内容引用自菜鸟教程
 | 缩写     | 全称                |
 | :------- | ------------------- |
 | h1/h2/h3 | heading level1/2/3  |
-| p        | paragragh           |
+| p        | paragraph           |
 | b        | bold                |
 | a        | anchor              |
 | href     | hypertext reference |

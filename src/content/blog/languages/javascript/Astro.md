@@ -5,12 +5,14 @@ pubDate: 2026-10-01
 draft: true
 tags: 前端
 ---
-## Obsidian
+## Obsidian 链接
 [[json-usage]]
 [[npm]]
 [[html]]
 [blog-architecture](blog-architecture.md)
 
+## 整体介绍
+astro底层是**Vite**
 astro文件永远都有两个区域，是astro自己的"代码栅栏"
 
 ## 一些缩写
@@ -18,7 +20,7 @@ astro文件永远都有两个区域，是astro自己的"代码栅栏"
 | --- | ------------------------------------------- |
 | RSS | Really Simple Syndication/Rich Site Summary |
 | MDX | Markdown + JSX                              |
-| JSX | Javascript XML                              |
+| JSX | JavaScript XML                              |
 | CSR | Client-Side Rendering                       |
 | SSR | Server-Side Rendering                       |
 | SSG | Static Site Generation                      |
@@ -179,3 +181,4 @@ const rssUrl = new URL(withBase('rss.xml'), Astro.site);
 ```
 ### 待整理
 Astro（以及 React、Vue 这一类）把"导入的组件变量"直接当标签用，这是框架提供的语法，不是 HTML 本身的标签。BaseHead
+

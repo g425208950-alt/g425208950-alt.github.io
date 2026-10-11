@@ -5,11 +5,113 @@ pubDate: 2026-10-10
 title: TypeScript
 description: TypeScript知识点
 ---
+## 概述
+
+TypeScript包含JavaScript，是Javascript的超集，即JavaScript是TypeScript的真子集，TypeScript提供了一些关于类型的附加功能。
 ## Zod
 Zod 是一个 TypeScript 的数据校验库,
 它能在运行时检查真实数据符不符合你写的数据规则,不符合就报错。同时它会从这份规则里自动推导出 TS 类型,所以类型和校验只写一遍。
+## 类型
+
+### 联合类型
+
+`string | number` 就是这个值要么是字符串要么是数字
+### 原始类型
+`string`、`number`、`boolean`、`null`、`undefined`、`symbol`、`bigint`
+可以起别名`type UserId = string`
+### 元组
+[string, number]表示正好两项，前一个必须是string，后一个必须是number
+(string | number)[] 表示长度任意，每项都可能是两者之一
+
+`[TLocales]` 就是个只有一项的元组，写它的目的不是当数组用，而是阻止条件类型按联合逐项分配。
+```ts
+
+type ToArray<T> = T extends any ? T[] : never;
+type R = ToArray<string | number>;   // string[] | number[]
+
+type IsNever<T> = T extends never ? true : false;
+type A = IsNever<never>;   // 不是 true，而是 never
+
+type IsNever2<T> = [T] extends [never] ? true : false;
+type B = IsNever2<never>;    // true
+type C = IsNever2<string>;   // false
+```
+### 条件类型
+类型层面的 if，写法和三元运算符一样：`A extends B ? X : Y`
+### 映射类型
+遍历一个类型的所有键，逐个生成新类型。`{ [K in keyof T]: ... }`
+`{ [K in keyof TFontProviders]: FontFamily<TFontProviders[K]> }` 就是在遍历你传的字体元组的每一项，把每项交给 `FontFamily` 检查。
+### 模版字面量类型
+用反引号和 `${}` 在**类型层面**拼字符串。`` type CssVar = `--${string}` ``
+### 字面量类型
+字面量类型就是"具体某个值本身当作一个类型"。`'redis'` 是一个类型，`'mysql'` 是另一个，各自只包含那一个值。它跟 `string` 的关系是子类型，`'redis'` 属于 `string`，反过来不成立。
+#### 怎么会让例如’redis‘自成一种类型？
+为什么 TS 能内建：TS 的类型系统是纯编译期的薄壳，字面量在源码里写得清清楚楚，它顺手把值本身登记成类型几乎零成本。而且 JS 里字符串、数字、布尔、null 都是一等值，天然有"某个具体值"的概念，给它配个类型顺理成章。
+
+>一等值指这个值能像其他任何值一样随便用：赋给变量、当参数传、当返回值、塞进数组或对象、参与运算，处处不受特殊限制。
+JS 里字符串、数字、布尔、null 都是一等值，`let x = 'redis'`、`f('redis')`、`['redis']` 都行，它们和普通数据没有区别。
+对照 C++，类型就不是一等值。`int` 这个类型不能赋给变量，不能当函数参数传，`int y = int;` 是非法的。你只能写 int 的实例，不能把类型本身当值使唤。
+
+这跟性能无关，类型不产生运行时开销。TS 编译后类型全部擦除，跑的 JS 里什么都没有，快慢跟这套类型系统不沾边。C++ 的 `integral_constant<int, 42>` 同理，也是编译期，运行时不花时间。
+
+真正的差别不在快慢，在于 C++ 的类型要参与代码生成。模板参数会影响最终汇编，所以参数必须是编译期能确切比较的东西。老 C++ 只允许整型、枚举、指针这类非类型模板参数，字符串字面量是运行时内存里的地址，跨编译单元还不一定相等，没法当参数，于是做不出 `'redis'` 这种类型。C++20 放宽了 NTTP，可以用字面量类型的类做参数，硬凑也能造出字面量字符串类型，比如用一个 `constexpr` 字符数组包装，但写法很重，没人真这么干。
+### btw
+>**非类型模板参数** （Non-type Template Parameters，简称NTTP）
+
+```c++
+template <typename T, int N>   // T 是类型参数，N 是 NTTP
+struct Array {
+    T data[N];
+};
+
+Array<double, 4> a;   // T = double，N = 4
+// 这个4 必须是预处理阶段就能计算出来的值。
+```
+## TypeScript关键字
+
+### declare
+`declare` 不是 JS 关键字，是 TypeScript 独有的。它告诉编译器：这个东西运行时**已经存在**，我这里只描述它的类型，别为我生成任何代码。所以你写 `export declare function defineConfig(...)` 等于说"defineConfig 这个函数在别处有实现，我只声明长什么样"。它只存在于类型世界，编译产物里没有它。
+### interface
+interface的作用是给一种对象起个名字，之后导出引用这个名字就可以了，还能用extends继承其他interface，同名的interface还会***声明合并***
+
+### type
+type声明的是***类型别名*** ，可以给任意类型的表达式起名字，语法是`type X = { ... }`
+type可以给联合类型、元组、原始类别、条件类型、映射类型、模版字面量类型起别名。
+### ?:
+我在类型定义里看到的，不算是运算符，'?'表示可选，也可以不在对象字面量里定义。
+## 函数
+
+```TypeScript
+export declare function defineConfig<const TLocales extends Locales = never, const TDriver extends SessionDriverName | SessionDriverConfig = never, const TFontProviders extends Array<FontProvider> = never>(config: AstroUserConfig<TLocales, TDriver, TFontProviders>): AstroUserConfig<TLocales, TDriver, TFontProviders>;
+
+```
+
+>`T` + `Locales`：`T` 是 Type 的缩写，前缀表示"这是个类型参数"，是 TS 社区约定（`T`、`TKey`、`TValue` 之类）。`Locales` 就是 i18n 里的"语言地区"配置。
+
+> i18n 指的是 internationalization i和n中间18个字符，和k8s比较像，哈哈。
+
+三个尖括号里的东西是类型参数，逐个拆第一个：
+
+
+```javascript
+(config: AstroUserConfig<TLocales, TDriver, TFontProviders>): AstroUserConfig<TLocales, TDriver, TFontProviders>
+```
+
+
+<!--一句话：`defineConfig` 是个恒等函数——传进去什么形状的配置，返回什么形状，唯一作用是让 TS 借调用现场推断并保留类型。-->
+
+### extend
+extends 相当于 C++的 require std::derived_from<Tocales, locales>，只接受符合类型的参数
+### =never
+`=never` `= never` 是默认值，相当于 C++ 模板默认参数 `= void`，没推断出来时兜底。`never` 在 TS 里是底类型，表示"无值"，这里当"未指定"用。
+### const
+` const TDriver extends SessionDriverName | SessionDriverConfig = never`这里的|代表可以是两种类型中的一种。`const`是把类型直接设为传入的值，而不是拓宽成宽泛类型（这是TypeScript 5.0的特性）
+### 参数列表
+是typescript的特性，在参数`:`后面跟着，表示参数的类型
+### 返回类型
+圆括号后面的`:`后面的类型就是返回值类型
 ## 后缀
 `.ts` 是正常源码，编译器会把它的内容编译成 `.js`，里面的类型信息在编译后消失。
 ### `.d.ts`
-`.d.ts` 是纯类型声明文件，只描述"这块代码长什么样"，不含任何实现，也永远不会被编译成 js。它相当于给已有的 js 代码或外部模块补一份类型说明书，让 TS 知道怎么检查和使用它，而运行时真正的逻辑还在别处。
-`.d.ts` 只有类型不参与编译。
+`.d.ts` 是 TypeScript 的类型声明文件，d 是 declaration（声明）。它是纯类型声明文件，只描述"这块代码长什么样"，不含任何实现，也永远不会被编译成 js。它相当于给已有的 js 代码或外部模块补一份类型说明书，让 TS 知道怎么检查和使用它，而运行时真正的逻辑还在别处。
+跟 `.ts` 的区别就是：`.ts` 有实现、会编译；`.d.ts` 只有类型、不参与编译。

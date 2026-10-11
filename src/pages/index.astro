@@ -77,31 +77,9 @@ const stats = [
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* 终端配色。四个角色就是你要的：普通白、品红、蓝、黄。
-			   值取的是常见的 One Dark 终端调色板，想换整套风格只改这四行。
-			   深色只覆盖这一页的 body —— Astro 的作用域样式会给 body 加上
-			   data-astro-cid 属性，特异性高于 global.css 里的 body 规则，
-			   所以 global.css 不用动。 */
+			/* 底色、星点和调色板都统一在 global.css 里了，这里只管字体：
+			   首页单独用等宽字体拿到命令行观感，其余页面仍走 --font-sans。 */
 			body {
-				/* 背景：底色仍是纯黑，但上面叠了两种东西 ——
-				   一层平铺的星点（用 radial-gradient 画出来的，不需要图片），
-				   以及顶部一团极淡的冷光。
-				   必须把 background-color / image / size / repeat 全部写一遍，
-				   才能完整盖掉 global.css 里那条 background 简写。 */
-				background-color: #000;
-				background-image:
-					radial-gradient(1.2px 1.2px at 30px 40px, rgba(220, 223, 228, 0.45), transparent 60%),
-					radial-gradient(1px 1px at 150px 120px, rgba(220, 223, 228, 0.28), transparent 60%),
-					radial-gradient(1px 1px at 240px 210px, rgba(220, 223, 228, 0.2), transparent 60%),
-					radial-gradient(900px 420px at 50% -8%, rgba(97, 175, 239, 0.1), transparent 70%);
-				background-size:
-					280px 280px,
-					280px 280px,
-					280px 280px,
-					100% 100%;
-				background-repeat: repeat, repeat, repeat, no-repeat;
-				color: #dcdfe4;
-				/* 命令行观感的关键：等宽字体。中文会落到后面的中文字体上 */
 				font-family:
 					'Cascadia Mono', 'JetBrains Mono', Consolas, 'DejaVu Sans Mono',
 					'Sarasa Mono SC', 'Microsoft YaHei', monospace;
@@ -133,10 +111,17 @@ const stats = [
 			}
 
 			.card {
-				/* 关键：禁止一个块被拆到相邻两列去。
-				   这里刻意不给背景和边框 —— 终端里没有卡片。 */
+				/* 禁止一个块被拆到相邻两列去 */
 				break-inside: avoid;
-				margin: 0 0 2rem;
+				margin: 0 0 1.75rem;
+				/* 一层压得很低的底色 + 一条细边。之前刻意不给背景和边框，
+				   想让首页像终端；但裸文字直接压在星点上会糊成一片，
+				   分类和背景完全没有层次，所以补上这一层。
+				   深色值取自 Primer：画布 #0d1117、边框 #21262d。 */
+				padding: 1.1rem 1.2rem;
+				border: 1px solid #21262d;
+				border-radius: 10px;
+				background: #0d1117;
 			}
 
 			/* global.css 把 h1~h6 设成了近黑色，深色底上必须逐项覆盖。

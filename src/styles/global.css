@@ -12,21 +12,22 @@ root前面为什么加冒号：
 :root 前面那个冒号表示它是伪类。伪类不是标签名，而是"状态"或"特殊位置"的限定词，语法上必须带冒号才能和标签名区分开。root 并不是某个 HTML 标签（HTML 里没有 <root> 元素），它是规范预定的关键字，意思是"文档的根元素"，在 HTML 里指的就是 <html>，所以 :root { } 和 html { } 效果相同。用前者的原因有两个：伪类在优先级上按"类"这一档计算，比标签名高一档，不容易被别处的 html { } 盖掉；以及语义更明确，一看就知道这是全站的根。
 */
 :root {
-	/* 配色全部取自 GitHub Primer 浅色主题（@primer/css 的 color-modes.css）：
-	   fgColor-default #1f2328 / fgColor-muted #59636e /
-	   fgColor-accent #0969da / borderColor-default #d1d9e0 */
-	--accent: #0969da; /* 链接与强调色 */
-	--accent-dark: #0550ae; /* 深一档的蓝，目前代码里没引用 */
-	--black: 31, 35, 40; /* #1f2328，标题 */
-	--gray: 89, 99, 110; /* #59636e，次要文字与阴影 */
-	--gray-light: 209, 217, 224; /* #d1d9e0，边框与分隔线 */
-	--gray-dark: 31, 35, 40; /* #1f2328，正文 */
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
+	/* 配色全部取自 GitHub Primer 深色主题（@primer/css 的 color-modes.css）：
+	   fgColor-default #f0f6fc / fgColor-muted #9198a1 /
+	   fgColor-accent #4493f8 / borderColor-default #3d444d */
+	--accent: #4493f8; /* 链接与强调色 */
+	--accent-dark: #316dca; /* 深一档的蓝，目前代码里没引用 */
+	--black: 240, 246, 252; /* #f0f6fc，标题 */
+	--gray: 145, 152, 161; /* #9198a1，次要文字与阴影 */
+	--gray-light: 61, 68, 77; /* #3d444d，边框与行内代码底 */
+	--gray-dark: 240, 246, 252; /* #f0f6fc，正文 */
 
-	/* GitHub 的系统字体栈，末尾补上中文字体兜底。
-	   想找回模板自带的 Atkinson，把 var(--font-atkinson) 加回最前面即可。 */
+	/* 英文字体用 Inter：本地自托管、只打包 latin 子集，两个字重共约 47 KB。
+	   --font-inter 这个变量由 BaseHead 里的 <Font> 组件注入，字体文件在
+	   src/assets/fonts/。中文不在里面，靠后面的系统字体兜底。
+	   想换英文字体：改这里的第一个值 + astro.config.mjs 里的 fonts 配置。 */
 	--font-sans:
-		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'PingFang SC',
+		var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
 		'Microsoft YaHei', Helvetica, Arial, sans-serif;
 
 	--box-shadow:
@@ -39,8 +40,29 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
+	/* 全站底色：纯黑 + 一层平铺星点 + 顶部一团冷光。
+	   星点用 radial-gradient 画，不依赖图片，全站只在这里定义一次。
+	   关键：每一层的 background-size 都不一样，而且刻意取互不成倍数的值
+	   （220/310/370/430/530）。叠加之后要到一个极大的公倍数才重复，
+	   所以看不出规则网格。可调旋钮：每层开头的尺寸是点径，rgba 最后一位是
+	   亮度，size 数值越小越密。 */
+	background-color: #000;
+	background-image:
+		radial-gradient(2px 2px at 24px 36px, rgba(226, 232, 240, 0.8), transparent 60%),
+		radial-gradient(1.5px 1.5px at 120px 96px, rgba(226, 232, 240, 0.55), transparent 60%),
+		radial-gradient(1.2px 1.2px at 190px 170px, rgba(226, 232, 240, 0.38), transparent 60%),
+		radial-gradient(1.5px 1.5px at 70px 200px, rgba(226, 232, 240, 0.5), transparent 60%),
+		radial-gradient(1px 1px at 300px 60px, rgba(226, 232, 240, 0.3), transparent 60%),
+		/* 顶部一团冷光，免得页面上方死黑一片 */
+		radial-gradient(1200px 520px at 50% -8%, rgba(97, 175, 239, 0.14), transparent 70%);
+	background-size:
+		220px 220px,
+		310px 310px,
+		370px 370px,
+		430px 430px,
+		530px 530px,
+		100% 100%;
+	background-repeat: repeat, repeat, repeat, repeat, repeat, no-repeat;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
@@ -179,4 +201,92 @@ hr {
 	clip-path: inset(50%);
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
+}
+
+/* ---------- 页脚 ---------- */
+/* Footer.astro 里完全没有 <style>，样式全部集中到这里。
+   原因是组件内的 <style> 在 dev 下会被浏览器缓存的旧模块覆盖，见下面那段注释。 */
+footer {
+	padding: 2.5em 1em 3em 1em;
+	background: #000;
+	color: #dcdfe4;
+}
+
+/* 两栏页脚：左边品牌（图标 + 站点名），右边联系方式，版权单独一行在最下面。
+   加一层 max-width 容器，否则两端对齐时两边会被拉到浏览器最边缘，看着很散。 */
+.footer-inner {
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.footer-main {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1.5rem;
+}
+
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+}
+
+/* 左右两栏共用的「标签：值」。标签压暗、值提亮，两边对称。 */
+.meta {
+	color: #9198a1;
+	font-size: 0.9rem;
+}
+
+.meta-label {
+	color: #6e7681;
+}
+
+.meta-value {
+	color: #9198a1;
+	/* 单击即整段选中，复制用户名或邮箱时不用手动拖选 */
+	user-select: all;
+}
+
+/* GitHub 用图标按钮。邮箱故意不做成链接：mailto: 会被系统默认关联到
+   Outlook，点了反而添乱，所以两边都给明文。 */
+.contact-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 1px solid #3d444d;
+	border-radius: 10px;
+	background: #151b23;
+	color: #dcdfe4;
+	text-decoration: none;
+	transition:
+		color 0.15s ease,
+		background 0.15s ease,
+		border-color 0.15s ease,
+		transform 0.15s ease;
+}
+
+.contact-btn:hover {
+	color: #c678dd;
+	background: #1c232c;
+	border-color: #c678dd;
+	transform: translateY(-2px);
+}
+
+.contact-btn:focus-visible {
+	outline: 2px solid #4493f8;
+	outline-offset: 2px;
+}
+
+/* 版权单独一行，比上面两栏再暗一档，不抢注意力。
+   上边距给得很大（120px，约三个空行）——它和上面那排是两种信息，
+   挨太近会显得是在一起的。 */
+.copyright {
+	margin: 6rem 0 0;
+	text-align: center;
+	font-size: 0.85rem;
+	color: #6e7681;
 }

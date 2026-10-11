@@ -38,22 +38,31 @@ export default defineConfig({
 	site,
 	base,
 	integrations: [mdx(), sitemap()],
+
+	// 关掉开发时左下角那个悬浮调试工具栏。它只在 dev 下存在，不进构建产物。
+	// 注意：改这个文件后必须重启 dev server 才生效，刷新页面不够。
+	devToolbar: {
+		enabled: false,
+	},
+
 	fonts: [
 		{
 			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
+			// 只含 latin 子集，两个字重加起来约 47 KB。中文不在这里，
+			// 交给 global.css 里 --font-sans 后面的系统中文字体兜底。
+			name: 'Inter',
+			cssVariable: '--font-inter',
 			fallbacks: ['sans-serif'],
 			options: {
 				variants: [
 					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
+						src: ['./src/assets/fonts/inter-latin-400-normal.woff2'],
 						weight: 400,
 						style: 'normal',
 						display: 'swap',
 					},
 					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
+						src: ['./src/assets/fonts/inter-latin-700-normal.woff2'],
 						weight: 700,
 						style: 'normal',
 						display: 'swap',

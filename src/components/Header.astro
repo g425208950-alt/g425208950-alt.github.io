@@ -17,9 +17,11 @@ import HeaderLink from './HeaderLink.astro';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: #000;
-		/* 终端里没有阴影，改用一条细线分隔 */
-		border-bottom: 1px solid #21262d;
+		/* 故意不用纯黑：底下的星点会透出来，页头下沿就不会出现一条硬边。
+		   backdrop-filter 把透出来的背景再糊一层，保证导航文字依然清楚。 */
+		background: rgba(0, 0, 0, 0.55);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 
 	/* 用三栏网格而不是 flex：左右两栏各占一份、中间那栏自然居中。
@@ -33,13 +35,18 @@ import HeaderLink from './HeaderLink.astro';
 
 	.internal-links {
 		grid-column: 2;
+		/* 导航固定用系统 UI 字体。它在首页会继承 body 的等宽字体，
+		   中文落进等宽栈之后字形很别扭——这块不该跟着终端风格走。 */
+		font-family: var(--font-sans);
 	}
 
-	/* 终端配色，和首页同一套：普通白 #dcdfe4、蓝 #61afef。
+	/* 配色：普通白 #dcdfe4、当前页蓝 #61afef。
 	   这三个 <a> 由 HeaderLink 渲染，但它们带着本组件的 data-astro-cid
 	   标记，所以在这里就能上色，不用改 HeaderLink。 */
 	nav a {
-		padding: 1em 0.5em;
+		/* 横向内边距给足：字号降到 0.9rem 之后 0.5em 只剩 7px，三项挤在一起。
+		   用 em 是为了让它跟着字号一起缩放。 */
+		padding: 1em 1.1em;
 		/* 字号比正文小一档：导航不该和正文抢注意力。
 		   padding 用的是 em，所以会跟着一起缩小，页头整体变矮。 */
 		font-size: 0.9rem;

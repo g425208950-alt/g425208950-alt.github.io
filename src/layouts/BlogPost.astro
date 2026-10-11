@@ -6,7 +6,11 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+// pubDate 是可选的：「关于」这类不是文章、没有发布日期的页面就不传，
+	// 布局会自动把日期那一行藏起来。
+type Props = Omit<CollectionEntry<'blog'>['data'], 'pubDate'> & {
+	pubDate?: Date;
+};
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
@@ -15,21 +19,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
-			/* 文章页和「关于」页共用这个布局，所以在这里把整页改成深色。
-			   关键在于覆盖 CSS 变量：自定义属性会被后代继承，而 global.css
-			   里几乎所有颜色都写成 var(--x)，所以改这几个值等于给整页换肤——
-			   包括 <slot /> 里由 markdown 渲染出来的内容，那些元素不归本组件
-			   的作用域管，普通选择器够不着。 */
-			body {
-				background: #000; /* 和页头页脚同色，避免出现接缝 */
-				--black: 240, 246, 252; /* #f0f6fc，标题 */
-				--gray: 145, 152, 161; /* #9198a1，次要文字与阴影 */
-				--gray-light: 61, 68, 77; /* #3d444d，边框与行内代码底 */
-				--gray-dark: 240, 246, 252; /* #f0f6fc，正文 */
-				--accent: #4493f8; /* GitHub 深色主题的链接蓝 */
-				--accent-dark: #316dca;
-			}
-
 			main {
 				width: calc(100% - 2em);
 				max-width: 100%;
@@ -79,16 +68,18 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 				<div class="prose">
 					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										最后更新于 <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
+						{
+							(pubDate || updatedDate) && (
+								<div class="date">
+									{pubDate && <FormattedDate date={pubDate} />}
+									{updatedDate && (
+										<div class="last-updated-on">
+											最后更新于 <FormattedDate date={updatedDate} />
+										</div>
+									)}
+								</div>
+							)
+						}
 						<h1>{title}</h1>
 						<hr />
 					</div>

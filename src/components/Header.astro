@@ -40,6 +40,9 @@ import HeaderLink from './HeaderLink.astro';
 	   标记，所以在这里就能上色，不用改 HeaderLink。 */
 	nav a {
 		padding: 1em 0.5em;
+		/* 字号比正文小一档：导航不该和正文抢注意力。
+		   padding 用的是 em，所以会跟着一起缩小，页头整体变矮。 */
+		font-size: 0.9rem;
 		color: #dcdfe4;
 		border-bottom: 4px solid transparent;
 		text-decoration: none;

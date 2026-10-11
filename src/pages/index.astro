@@ -39,6 +39,37 @@ const categories = [...byCategory.entries()]
 		};
 	})
 	.sort((a, b) => b.count - a.count);
+
+// ---------- 站点统计 ----------
+// 口径：先去掉代码块（它不该算进「写了多少字」），然后中日韩字符按「字」算、
+// 拉丁字母数字按「词」算，这样中英混排的笔记也能得出一个合理的数字。
+// 想改口径只动这个函数。
+function countWords(text) {
+	const withoutCode = text.replace(/```[\s\S]*?```/g, '');
+	const cjk = (withoutCode.match(/[\u4e00-\u9fff]/g) ?? []).length;
+	const latin = (withoutCode.match(/[A-Za-z0-9]+/g) ?? []).length;
+	return cjk + latin;
+}
+
+// 统计只算**已发布**的文章，和 dev 下分类墙是否显示草稿无关。
+// 所以本地开发时「统计里的篇数」会小于「列出来的文章数」，那是正常的。
+const published = posts.filter((post) => !post.data.draft);
+
+const totalWords = published.reduce((sum, post) => sum + countWords(post.body ?? ''), 0);
+
+// 起始日期写死，不从文章里倒推 —— 免得某篇旧文章的日期把天数带偏。
+// 注意天数是构建那一刻算出来的，只在重新部署时更新。
+const START_DATE = new Date('2025-05-12T00:00:00Z');
+const days = Math.max(
+	1,
+	Math.round((Date.now() - START_DATE.getTime()) / 86_400_000),
+);
+
+const stats = [
+	`${published.length} 篇`,
+	`${(totalWords / 1000).toFixed(1)}k 字`,
+	`${days} 天`,
+];
 ---
 
 <!doctype html>
@@ -52,8 +83,23 @@ const categories = [...byCategory.entries()]
 			   data-astro-cid 属性，特异性高于 global.css 里的 body 规则，
 			   所以 global.css 不用动。 */
 			body {
-				/* background 是简写，会顺带清掉 global.css 的顶部渐变 */
-				background: #000;
+				/* 背景：底色仍是纯黑，但上面叠了两种东西 ——
+				   一层平铺的星点（用 radial-gradient 画出来的，不需要图片），
+				   以及顶部一团极淡的冷光。
+				   必须把 background-color / image / size / repeat 全部写一遍，
+				   才能完整盖掉 global.css 里那条 background 简写。 */
+				background-color: #000;
+				background-image:
+					radial-gradient(1.2px 1.2px at 30px 40px, rgba(220, 223, 228, 0.45), transparent 60%),
+					radial-gradient(1px 1px at 150px 120px, rgba(220, 223, 228, 0.28), transparent 60%),
+					radial-gradient(1px 1px at 240px 210px, rgba(220, 223, 228, 0.2), transparent 60%),
+					radial-gradient(900px 420px at 50% -8%, rgba(97, 175, 239, 0.1), transparent 70%);
+				background-size:
+					280px 280px,
+					280px 280px,
+					280px 280px,
+					100% 100%;
+				background-repeat: repeat, repeat, repeat, no-repeat;
 				color: #dcdfe4;
 				/* 命令行观感的关键：等宽字体。中文会落到后面的中文字体上 */
 				font-family:
@@ -66,6 +112,18 @@ const categories = [...byCategory.entries()]
 				max-width: calc(100% - 2em);
 				margin: 0 auto;
 				padding: 3rem 1em 5rem;
+			}
+
+			/* 统计行 */
+			.stats {
+				margin: 0 0 2.5rem;
+				font-size: 0.8rem;
+				color: #9198a1;
+			}
+			.stats span + span::before {
+				content: '·';
+				margin: 0 0.7em;
+				color: #3d444d;
 			}
 
 			/* 多列瀑布：每列一条，像终端里的分栏输出 */
@@ -149,6 +207,10 @@ const categories = [...byCategory.entries()]
 			<!-- 页面上不放可见的大标题（站点名已在 Header 里），
 			     但保留一个 h1 给屏幕阅读器和搜索引擎 -->
 			<h1 class="sr-only">{SITE_TITLE}</h1>
+
+			<p class="stats">
+				{stats.map((item) => <span>{item}</span>)}
+			</p>
 
 			<div class="columns">
 				{

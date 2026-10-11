@@ -46,17 +46,19 @@ const categories = [...byCategory.entries()]
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* 深色只覆盖这一页的 body。Astro 的作用域样式会给 body 加上
+			/* 终端配色。四个角色就是你要的：普通白、品红、蓝、黄。
+			   值取的是常见的 One Dark 终端调色板，想换整套风格只改这四行。
+			   深色只覆盖这一页的 body —— Astro 的作用域样式会给 body 加上
 			   data-astro-cid 属性，特异性高于 global.css 里的 body 规则，
-			   所以不用改 global.css 就能只让首页变暗。
-			   颜色取自 GitHub 深色主题（Primer 的 color-modes.css）：
-			   bgColor-default #0d1117 / bgColor-muted #151b23 /
-			   fgColor-default #f0f6fc / fgColor-muted #9198a1 /
-			   borderColor-default #3d444d / fgColor-accent #4493f8 */
+			   所以 global.css 不用动。 */
 			body {
 				/* background 是简写，会顺带清掉 global.css 的顶部渐变 */
-				background: #0d1117;
-				color: #f0f6fc;
+				background: #000;
+				color: #dcdfe4;
+				/* 命令行观感的关键：等宽字体。中文会落到后面的中文字体上 */
+				font-family:
+					'Cascadia Mono', 'JetBrains Mono', Consolas, 'DejaVu Sans Mono',
+					'Sarasa Mono SC', 'Microsoft YaHei', monospace;
 			}
 
 			main {
@@ -66,34 +68,33 @@ const categories = [...byCategory.entries()]
 				padding: 3rem 1em 5rem;
 			}
 
-			/* 多列瀑布：卡片不等高也能自然铺满每一列 */
+			/* 多列瀑布：每列一条，像终端里的分栏输出 */
 			.columns {
 				columns: 3;
-				column-gap: 1.25rem;
+				column-gap: 2.5rem;
 			}
 
 			.card {
-				/* 关键：禁止一张卡片被拆到相邻两列去 */
+				/* 关键：禁止一个块被拆到相邻两列去。
+				   这里刻意不给背景和边框 —— 终端里没有卡片。 */
 				break-inside: avoid;
-				margin: 0 0 1.25rem;
-				padding: 1.25rem 1.4rem;
-				background: #151b23;
-				border: 1px solid #3d444d;
-				border-radius: 10px;
+				margin: 0 0 2rem;
 			}
 
-			/* global.css 把 h1~h6 设成了近黑色，深色底上必须逐项覆盖 */
+			/* global.css 把 h1~h6 设成了近黑色，深色底上必须逐项覆盖。
+			   分类名给品红 */
 			.card h2 {
-				margin: 0 0 0.35rem;
-				font-size: 1.25rem;
+				margin: 0 0 0.2rem;
+				font-size: 1.15rem;
 				letter-spacing: 0;
-				color: #f0f6fc;
+				color: #c678dd;
 			}
 
+			/* 篇数给黄色 */
 			.count {
-				margin: 0 0 0.9rem;
+				margin: 0 0 0.7rem;
 				font-size: 0.8rem;
-				color: #9198a1;
+				color: #e5c07b;
 			}
 
 			.card ul {
@@ -103,7 +104,7 @@ const categories = [...byCategory.entries()]
 			}
 
 			.card li {
-				margin-bottom: 0.45rem;
+				margin-bottom: 0.3rem;
 				font-size: 0.9rem;
 				line-height: 1.45;
 			}
@@ -112,8 +113,9 @@ const categories = [...byCategory.entries()]
 				margin-bottom: 0;
 			}
 
+			/* 文章标题给蓝色，对应终端 ls 输出里的目录名 */
 			.card a {
-				color: #4493f8;
+				color: #61afef;
 				text-decoration: none;
 			}
 
@@ -121,10 +123,11 @@ const categories = [...byCategory.entries()]
 				text-decoration: underline;
 			}
 
+			/* 「还有 N 篇」保持普通白 */
 			.rest {
-				margin: 0.9rem 0 0;
+				margin: 0.7rem 0 0;
 				font-size: 0.8rem;
-				color: #9198a1;
+				color: #dcdfe4;
 			}
 
 			@media (max-width: 900px) {

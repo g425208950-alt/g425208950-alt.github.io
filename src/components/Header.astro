@@ -17,8 +17,9 @@ import HeaderLink from './HeaderLink.astro';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background: #000;
+		/* 终端里没有阴影，改用一条细线分隔 */
+		border-bottom: 1px solid #21262d;
 	}
 
 	/* 用三栏网格而不是 flex：左右两栏各占一份、中间那栏自然居中。
@@ -34,16 +35,19 @@ import HeaderLink from './HeaderLink.astro';
 		grid-column: 2;
 	}
 
+	/* 终端配色，和首页同一套：普通白 #dcdfe4、蓝 #61afef。
+	   这三个 <a> 由 HeaderLink 渲染，但它们带着本组件的 data-astro-cid
+	   标记，所以在这里就能上色，不用改 HeaderLink。 */
 	nav a {
 		padding: 1em 0.5em;
-		/* --black 的值是 "31, 35, 40" 这种分量列表，必须套在 rgb() 里才是合法颜色 */
-		color: rgb(var(--black));
+		color: #dcdfe4;
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
 
 	nav a.active {
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		color: #61afef;
+		border-bottom-color: #61afef;
 	}
 </style>

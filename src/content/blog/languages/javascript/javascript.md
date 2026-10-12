@@ -37,6 +37,11 @@ V8引擎是Google写的JavaScript引擎，本质是一个C++写的程序，它�
 是ESM标准定义的，表示这个文件默认export default修饰的***值***
 ### import 
 import后面的内容如果有花括号，是***命名导入***，如果没有花括号则是***默认导入***，命名导入的名字必须和对方export时写的一致。
+
+import的路径如果有`./`或`../`说明是本地文件，如果是`astro/types`这种则是***模块说明符***，是通过node_modules解析的路径，如果其中有`:` 比如`astro:assets`则是***虚拟模块***。
+### export
+`export { default as Image } from "astro/components/Image.astro` 是"转口"，英文叫 re-export：它自己不定义任何东西，只是把另一个模块的导出原样再导出一次。本模块自己用不到这个export，这里是把Image.astro的default export 作为 Image类名导出。
+
 ## 运算符
 ### || 和 ？？
 

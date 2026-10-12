@@ -2,7 +2,11 @@
 title: 缩写速查
 description: 全站缩写与全称的汇总表，按字母序排列，方便查找。
 pubDate: 2026-10-11
+aliases:
+  - abbr
 ---
+## 已整理
+
 | 缩写       | 全称                                                                     |
 | -------- | ---------------------------------------------------------------------- |
 | .cjs     | CommonJS(CJS)                                                          |
@@ -45,3 +49,9 @@ pubDate: 2026-10-11
 | URDF     | Unified Robot Description Format（统一机器人描述格式）                            |
 | W3C      | World Wide Web Consortium                                              |
 | WHATWG   | Web Hypertext Application Technology Working Group                     |
+## 待整理
+| 缩写   | 全称          |
+| ---- | ----------- |
+| WASM | WebAssembly |
+|      |             |
+|      |             |

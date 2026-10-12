@@ -70,7 +70,7 @@ Array<double, 4> a;   // T = double，N = 4
 ## TypeScript关键字
 
 ### declare
-`declare` 不是 JS 关键字，是 TypeScript 独有的。它告诉编译器：这个东西运行时**已经存在**，我这里只描述它的类型，别为我生成任何代码。所以你写 `export declare function defineConfig(...)` 等于说"defineConfig 这个函数在别处有实现，我只声明长什么样"。它只存在于类型世界，编译产物里没有它。
+`declare`是 TypeScript 的。它告诉编译器：这个东西运行时**已经存在**，我这里只描述它的类型，别为我生成任何代码。所以你写 `export declare function defineConfig(...)` 等于说"defineConfig 这个函数在别处有实现，我只声明长什么样"。它只存在于类型世界，编译产物里没有它。
 ### interface
 interface的作用是给一种对象起个名字，之后导出引用这个名字就可以了，还能用extends继承其他interface，同名的interface还会***声明合并***
 

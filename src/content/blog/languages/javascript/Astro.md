@@ -13,6 +13,7 @@ tags: 前端
 
 ## 整体介绍
 astro底层是**Vite**
+astro7的模板编译器是用Rust写的，Astro早期用过Go编译的WASM编译器，全称WebAssembly
 astro文件永远都有两个区域，是astro自己的"代码栅栏"
 
 ## 一些缩写

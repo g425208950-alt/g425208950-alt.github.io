@@ -527,11 +527,14 @@ body.page-home {
    注意这里没有用 One Dark 的注释灰 #5c6370：那是给语法高亮用的，
    在纯黑底上只有 3.47:1，低于正文 4.5:1 的下限，当小字号元信息读起来会吃力。
    #828a99 是 6.04:1。
-   分隔点 #3e4451（One Dark 的 gutter）纯装饰、不承载信息，所以可以更暗。 */
+   分隔点 #3e4451（One Dark 的 gutter）纯装饰、不承载信息，所以可以更暗。
+   它在 main 外面，所以这里的居中相对的是视口，和 Hero 用同一条中轴线。 */
 .page-home .stats {
 	margin: 0 0 1.75rem;
+	padding: 0 1em;
 	font-size: 0.8rem;
 	color: #828a99;
+	text-align: center;
 }
 
 .page-home .stats span + span::before {

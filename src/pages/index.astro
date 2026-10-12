@@ -71,19 +71,21 @@ const stats = [
 		{/* Hero 刻意放在 main 外面。main 是靠左的 880px 列，在它里面居中
 		     等于「在那一列里居中」，宽屏上中心会明显偏左（2K 屏上偏左约 840px）。
 		     提到外面之后它的 margin: auto 才是相对视口的，真正居中到整页；
-		     统计行、搜索和列表仍在 main 里，靠左且彼此对齐。 */}
+		     搜索和列表仍在 main 里，靠左且彼此对齐。 */}
 		<section class="hero">
 			<p>你好，我是 <strong>42520</strong>，一个还在读本科的学生，第一门语言是 C++</p>
 
 			<p>这个站点目前只包含一些笔记</p>
 		</section>
 
+		{/* 统计行跟着 Hero 一起居中，所以也在 main 外面 ——
+		     放进 main 它就变成靠左那一列的一部分了。 */}
+		<p class="stats">{stats.map((item) => <span>{item}</span>)}</p>
+
 		<main>
 			{/* 页面上不放可见的大标题（站点名已在 Hero），
 			     但保留一个 h1 给屏幕阅读器和搜索引擎 */}
 			<h1 class="sr-only">{SITE_TITLE}</h1>
-
-			<p class="stats">{stats.map((item) => <span>{item}</span>)}</p>
 
 			{/* 搜索。完整列表已经渲染在同一页上，所以不需要索引也不需要网络请求，
 			     输入时直接在本地过滤 DOM（见文件末尾的 script）。

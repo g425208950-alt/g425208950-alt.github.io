@@ -26,3 +26,16 @@ submodule 是"一个 git 仓库里嵌了另一个 git 仓库"的机制，外层�
 #### 实际使用
 `git submodule add https://github.com/flazz/vim-colorschemes.git ~/.vim/bundle/colorschemes`
 这里就是在一个git仓库里加上一个submodule子仓库的实际代码。
+
+### remote
+`git remote -v` (verbose)列出所有远程和它们的地址，
+`git remote`只列远程的名字，一行一个
+`git remote add origin <url>` 添加一个叫 origin 的远程，`git remote remove origin` 删掉，`git remote set-url origin <新地址>` 改地址。
+
+### ls-remote
+
+挺好用，可以看远端和本地版本
+### status
+
+#### -sb
+`-s`是short，`-b`是branch，

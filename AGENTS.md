@@ -99,15 +99,45 @@ Windows git (PowerShell / Git Bash). Four rules follow from that:
   `npm run dev` and `npm run build` belong to Windows. The WSL side does file edits,
   git and text search only, which means it **cannot verify a build**: after changing
   styles or components, ask the human to run the build/dev server and report back.
-- **A WSL edit may never reach the Windows dev server's watcher.** Vite invalidates
-  cached CSS modules from file-watch events, and watching across the WSL/Windows
-  boundary is unreliable. The result is a misleading split: the dev server re-reads
-  the `.astro` file per request, so **new markup appears while the old CSS keeps
-  being served** — layouts, colours and `<style>` edits silently do nothing. When a
-  human reports "my change had no effect", do not debug the CSS in that state. Ask
-  them to stop and restart `npm run dev` and hard-refresh the browser
-  (Ctrl+Shift+R) first; only suspect the code if a restart changes nothing.
+- **Component `<style>` blocks are the fragile kind of CSS in dev — not WSL edits.**
+  This was once blamed on the WSL/Windows file watcher. That was wrong: measuring it
+  showed a `global.css` edit reaching the dev server within seconds. The real
+  mechanism is that in dev Astro emits a component's `<style>` **twice** — once as a
+  `<style>` tag in the SSR'd HTML, and once as a Vite JS module
+  (`/src/components/X.astro?astro&type=style&index=0&lang.css`). The browser caches
+  that module and re-runs the *old* copy, which overwrites the fresh SSR CSS. Hence the
+  misleading split: **new markup appears while the old CSS keeps being applied**, and
+  `<style>` edits look like they did nothing.
+
+  When a human reports "my change had no effect": first confirm the server is actually
+  serving the new rule, by fetching it directly (`curl -s localhost:4321/` works from
+  WSL on this machine, and the dev server's HTML contains the CSS). If the new rule is
+  there, the browser is the problem — have them clear site data (DevTools →
+  Application → Storage → Clear site data), which is stronger than Ctrl+Shift+R.
+
+  The durable fix is to keep these styles out of component `<style>` blocks entirely:
+  put them in `global.css` (that is why `Footer.astro` has none) or in a plain
+  imported stylesheet. Component scoping via `data-astro-cid` is not worth this
+  failure mode for site-wide chrome.
 
 Note that `git status` can report a clean tree even when a file is unreadable,
 because it short-circuits on cached stat data. Run `git add -A` (or a build)
 before trusting that a checkout is healthy.
+
+## 待办：首页合并与文章页页头（已定方向，尚未动手）
+
+### 首页与「关于」合并成一个个人页
+
+把 `src/pages/about.astro` 的内容并进首页顶部做成 hero 区，去掉首页的导航栏，
+「笔记」的入口放进这个页面里。
+
+注意：文章详情页**仍然需要**一个页头。它是被搜索引擎和 RSS 直接打开的，
+没有页头读者既不知道这是哪个站，也没有路回首页，只能按浏览器后退。
+
+`/about/` 和 `/blog/` 两个路由是否保留还没定。视觉上的待办记在
+`DESIGN-NOTES.md`，那份不是这件事。
+
+### 文章页页头用 favicon / 头像作为回首页的入口
+
+文章页的页头放一个站点 favicon 或头像，点击即返回首页。这样页头可以保持极简，
+不必再摆「首页 / 笔记 / 关于」那一排链接。

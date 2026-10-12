@@ -1,7 +1,8 @@
 ---
-title: dequeue数据结构
+title: deque数据结构
 description: 突然发现dequeue底层不是vector，queue底层也不是vector
 pubDate: 2026-10-07
+draft: true
 ---
 dequeue有`push_back()` / `pop_back()`、`push_front()` / `pop_front()`的增删接口，为了保证都是O(1)，肯定不能是vector了，但是dequeue还需要保证随机访问的时间复杂度是O(1)，
 我想象中应该是哈希表 映射 链表的一些节点，不过哈希表本来就不是严格O(1)，而且链表随机访问更不是O(1)，所以我这个思路就不通了。

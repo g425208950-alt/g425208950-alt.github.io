@@ -4,6 +4,7 @@ description: 全站缩写与全称的汇总表，按字母序排列，方便查�
 pubDate: 2026-10-11
 aliases:
   - abbr
+draft: true
 ---
 ## 已整理
 

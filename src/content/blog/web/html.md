@@ -1,7 +1,8 @@
 ---
-title: HTML文档学习
-description: HTML文档学习
+title: HTML
+description: HTML
 pubDate: 2026-10-1
+draft: true
 ---
 
 教程推荐：[HTML 教程 | 菜鸟教程](https://www.runoob.com/html/html-tutorial.html)

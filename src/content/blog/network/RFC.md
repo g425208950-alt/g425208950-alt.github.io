@@ -2,6 +2,7 @@
 title: RFC是什么？
 description: 我一直以为RFC只是一种评论形式（？
 pubDate: 2026-10-03
+draft: true
 ---
 
 ## 原意

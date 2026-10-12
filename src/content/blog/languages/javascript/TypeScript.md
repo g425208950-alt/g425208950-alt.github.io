@@ -4,6 +4,7 @@ aliases:
 pubDate: 2026-10-10
 title: TypeScript
 description: TypeScript知识点
+draft: true
 ---
 ## 概述
 

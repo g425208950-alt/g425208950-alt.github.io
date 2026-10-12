@@ -2,6 +2,7 @@
 title: PAROL6
 description: 第四周发现计算机网络及应用课要做这个，恶补中
 pubDate: 2026-10-07
+draft: true
 ---
 [Source-Robotics/PAROL6-Desktop-robot-arm: BOM, STL files and instructions for PAROL6 3D printed robot arm](https://github.com/Source-Robotics/PAROL6-Desktop-robot-arm)
 ## 关键词

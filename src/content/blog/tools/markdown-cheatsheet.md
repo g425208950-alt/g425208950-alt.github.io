@@ -2,6 +2,9 @@
 title: Markdown 写作速查
 description: 写博客时最常用的 Markdown 语法，贴在手边随时查。
 pubDate: 2026-09-30
+aliases:
+  - md
+draft: true
 ---
 
 这篇当备忘录用，忘了语法就翻出来看一眼。

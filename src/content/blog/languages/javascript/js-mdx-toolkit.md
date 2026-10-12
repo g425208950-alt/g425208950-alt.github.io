@@ -2,6 +2,7 @@
 title: JavaScript的MDX工具学习
 description: 好多东西呀
 pubDate: 2026-10-03
+draft: true
 ---
 
 识别.mdx为后缀的文件，可以用Markdown 语法 + 能 import 组件、能写 JSX 表达式。相当于"Markdown 的书写体验 + 组件系统的能力"。

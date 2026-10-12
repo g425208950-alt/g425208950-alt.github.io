@@ -2,6 +2,9 @@
 title: 回溯算法
 description: LeetCode中的经典回溯算法题
 pubDate: 2026-10-05
+aliases:
+  - 回溯
+draft: true
 ---
 
 通常用来解决全排列问题

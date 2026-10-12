@@ -12,6 +12,11 @@ root前面为什么加冒号：
 :root 前面那个冒号表示它是伪类。伪类不是标签名，而是"状态"或"特殊位置"的限定词，语法上必须带冒号才能和标签名区分开。root 并不是某个 HTML 标签（HTML 里没有 <root> 元素），它是规范预定的关键字，意思是"文档的根元素"，在 HTML 里指的就是 <html>，所以 :root { } 和 html { } 效果相同。用前者的原因有两个：伪类在优先级上按"类"这一档计算，比标签名高一档，不容易被别处的 html { } 盖掉；以及语义更明确，一看就知道这是全站的根。
 */
 :root {
+	/* 告诉浏览器「这个页面是深色的」。不写这一行，浏览器会按浅色页面来渲染
+	   所有由它自己画的东西 —— 滚动条、搜索框的清除按钮、自动填充的背景，
+	   于是纯黑页面上会出现一条刺眼的亮色滚动条。 */
+	color-scheme: dark;
+
 	/* 配色全部取自 GitHub Primer 深色主题（@primer/css 的 color-modes.css）：
 	   fgColor-default #f0f6fc / fgColor-muted #9198a1 /
 	   fgColor-accent #4493f8 / borderColor-default #3d444d */
@@ -241,6 +246,30 @@ pre {
 	font-size: 0.9em;
 	line-height: 1.6;
 	border-radius: 8px;
+	/* 长代码要横向滚动，滚动条会压在代码下方。细一档、压暗一档，
+	   免得它成了代码块里最显眼的东西。scrollbar-width / scrollbar-color
+	   是标准属性（Firefox、Chrome 121+），下面几条 ::-webkit- 兜住 Safari
+	   和更老的 Chrome —— 标准属性一旦生效，Chrome 会忽略 ::-webkit- 那组，
+	   两者不会打架。 */
+	scrollbar-width: thin;
+	scrollbar-color: #3d444d transparent;
+}
+
+pre::-webkit-scrollbar {
+	height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background: #3d444d;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+	background: #4b5263;
 }
 
 /* 代码用和首页同一套等宽栈。不写这一条的话它们会用浏览器默认的等宽字体，

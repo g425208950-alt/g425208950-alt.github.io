@@ -1,18 +1,20 @@
 ---
 import { Image } from 'astro:assets';
+import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
 
-// pubDate 是可选的：「关于」这类不是文章、没有发布日期的页面就不传，
-	// 布局会自动把日期那一行藏起来。
+// pubDate 是可选的：没有发布日期的页面就不传，布局会把日期那一行藏起来。
 type Props = Omit<CollectionEntry<'blog'>['data'], 'pubDate'> & {
 	pubDate?: Date;
+	/** 正文的标题列表，由 [...slug].astro 从 render() 的结果里传进来，侧栏用它做目录 */
+	headings?: MarkdownHeading[];
 };
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
 ---
 
 <html lang="zh-CN">
@@ -21,33 +23,95 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 
 	<body class="page-post">
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						{
-							(pubDate || updatedDate) && (
-								<div class="date">
-									{pubDate && <FormattedDate date={pubDate} />}
-									{updatedDate && (
-										<div class="last-updated-on">
-											最后更新于 <FormattedDate date={updatedDate} />
-										</div>
-									)}
-								</div>
-							)
-						}
-						<h1>{title}</h1>
-						<hr />
+		{/* 页头没有了：回首页的入口在侧栏顶部的站点名上。
+		     这也是侧栏不能整个藏掉的原因 —— 窄屏下它折到正文上方，而不是消失。 */}
+		<div class="post-layout">
+			<Sidebar headings={headings} />
+			<main>
+				<article>
+					<div class="hero-image">
+						{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
+					<div class="prose">
+						<div class="title">
+							{
+								(pubDate || updatedDate) && (
+									<div class="date">
+										{pubDate && <FormattedDate date={pubDate} />}
+										{updatedDate && (
+											<div class="last-updated-on">
+												最后更新于 <FormattedDate date={updatedDate} />
+											</div>
+										)}
+									</div>
+								)
+							}
+							<h1>{title}</h1>
+							<hr />
+						</div>
+						<slot />
+					</div>
+				</article>
+			</main>
+		</div>
 		<Footer />
+
+		<script>
+			// 给每个代码块套一层包裹层再加一个复制按钮。
+			//
+			// 为什么要包裹层：<pre> 自己是横向滚动容器，按钮若直接放在它里面，
+			// 长代码往右滚动时按钮会跟着划出视野。套一层 position: relative 的
+			// 外壳、把按钮放在外壳里，它就固定不动了。
+			//
+			// 按钮是脚本注入的，所以没有 JS 时页面上没有它，代码块依然完整可读。
+
+			// 图标按钮没有文字，三种状态各用一个图标。都是 14px，
+			// 尺寸一致按钮才不会在状态切换时跳动。
+			const ICON_COPY = `<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="8.5" height="8.5" rx="1.8"/><path d="M10 3.5V3a2 2 0 0 0-2-2H3.5a2 2 0 0 0-2 2V9a2 2 0 0 0 2 2H4"/></svg>`;
+			const ICON_DONE = `<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 6.5 12 13 4.5"/></svg>`;
+			const ICON_FAIL = `<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3.2v6"/><path d="M8 12.4v.2"/></svg>`;
+
+			for (const pre of document.querySelectorAll('pre.astro-code')) {
+				const code = pre.querySelector('code');
+				if (!code) continue;
+
+				const wrap = document.createElement('div');
+				wrap.className = 'code-wrap';
+				pre.before(wrap);
+				wrap.append(pre);
+
+				const btn = document.createElement('button');
+				btn.type = 'button';
+				btn.className = 'copy-btn';
+				btn.innerHTML = ICON_COPY;
+				// 图标本身对读屏器是隐藏的，所以按钮的名字只能靠 aria-label；
+				// 一页里会有多个复制按钮，名字要说清作用范围
+				btn.setAttribute('aria-label', '复制这段代码');
+
+				btn.addEventListener('click', async () => {
+					let ok = true;
+					try {
+						// textContent 里只有代码本身：行号是 CSS 计数器画的，不在文本里
+						await navigator.clipboard.writeText(code.textContent ?? '');
+					} catch {
+						ok = false;
+					}
+
+					btn.innerHTML = ok ? ICON_DONE : ICON_FAIL;
+					btn.classList.toggle('is-done', ok);
+					btn.classList.toggle('is-failed', !ok);
+					btn.setAttribute('aria-label', ok ? '已复制这段代码' : '复制失败，请手动选择代码');
+
+					// 无论成功失败都恢复，避免按钮停在中间态
+					setTimeout(() => {
+						btn.innerHTML = ICON_COPY;
+						btn.classList.remove('is-done', 'is-failed');
+						btn.setAttribute('aria-label', '复制这段代码');
+					}, 1500);
+				});
+
+				wrap.append(btn);
+			}
+		</script>
 	</body>
 </html>

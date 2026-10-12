@@ -39,6 +39,17 @@ export default defineConfig({
 	base,
 	integrations: [mdx(), sitemap()],
 
+	// 代码高亮的主题。Astro 默认是 github-dark，那套配色和本站没有任何关系；
+	// 换成 one-dark-pro 之后，代码里的关键字 / 字符串 / 注释用的就是 One Dark
+	// 那一套，和首页终端风的三色（品红 #c678dd、黄 #e5c07b、蓝 #61afef）同源。
+	// 注意：Shiki 会把主题的背景色以内联样式写在 <pre> 上，所以 global.css 里
+	// 那条 background 必须带 !important 才压得住。
+	markdown: {
+		shikiConfig: {
+			theme: 'one-dark-pro',
+		},
+	},
+
 	// 关掉开发时左下角那个悬浮调试工具栏。它只在 dev 下存在，不进构建产物。
 	// 注意：改这个文件后必须重启 dev server 才生效，刷新页面不够。
 	devToolbar: {

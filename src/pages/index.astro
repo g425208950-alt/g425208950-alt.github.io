@@ -2,43 +2,33 @@
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { postSlug } from '../utils/post';
 import { withBase } from '../utils/url';
 
 const showDrafts = import.meta.env.DEV;
 
-// post.id 是「相对 src/content/blog 的路径，不带扩展名」，例如
-// languages/javascript/vue，所以第一段就是分类名。
-const posts = (await getCollection('blog')).filter(
-	(post) => showDrafts || !post.data.draft,
-);
+const posts = (await getCollection('blog'))
+	.filter((post) => showDrafts || !post.data.draft)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const byCategory = new Map();
+// frontmatter 里写的是 2026-10-11 这种，会被解析成 UTC 零点。
+// 所以取年月日要用 ISO 字符串，不能用 getFullYear()/getDate()——
+// 后者按本地时区算，在 UTC 负偏移的机器上会整体差一天。
+const isoDay = (date) => date.toISOString().slice(0, 10);
+
+// 按年份分组。posts 已经按日期倒序，所以顺序遍历、遇到新的一年就开一组，
+// 天然就是「新的年份在前」，不需要再排一次。
+const byYear = [];
 for (const post of posts) {
-	const slash = post.id.indexOf('/');
-	const category = slash === -1 ? 'uncategorized' : post.id.slice(0, slash);
-	if (!byCategory.has(category)) byCategory.set(category, []);
-	byCategory.get(category).push(post);
+	const year = isoDay(post.data.pubDate).slice(0, 4);
+	const last = byYear[byYear.length - 1];
+	if (!last || last.year !== year) {
+		byYear.push({ year, posts: [post] });
+	} else {
+		last.posts.push(post);
+	}
 }
-
-// 每个分类取最新 5 篇：卡片高度因此不一样，瀑布感才出得来。
-const PER_CARD = 5;
-
-const categories = [...byCategory.entries()]
-	.map(([name, items]) => {
-		const sorted = items.sort(
-			(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-		);
-		return {
-			name,
-			count: items.length,
-			latest: sorted.slice(0, PER_CARD),
-			rest: Math.max(0, items.length - PER_CARD),
-		};
-	})
-	.sort((a, b) => b.count - a.count);
 
 // ---------- 站点统计 ----------
 // 口径：先去掉代码块（它不该算进「写了多少字」），然后中日韩字符按「字」算、
@@ -51,7 +41,7 @@ function countWords(text) {
 	return cjk + latin;
 }
 
-// 统计只算**已发布**的文章，和 dev 下分类墙是否显示草稿无关。
+// 统计只算**已发布**的文章，和 dev 下列表是否显示草稿无关。
 // 所以本地开发时「统计里的篇数」会小于「列出来的文章数」，那是正常的。
 const published = posts.filter((post) => !post.data.draft);
 
@@ -78,47 +68,81 @@ const stats = [
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} appendSiteName={false} />
 	</head>
 	<body class="page-home">
-		<Header />
+		{/* Hero 刻意放在 main 外面。main 是靠左的 880px 列，在它里面居中
+		     等于「在那一列里居中」，宽屏上中心会明显偏左（2K 屏上偏左约 840px）。
+		     提到外面之后它的 margin: auto 才是相对视口的，真正居中到整页；
+		     统计行、搜索和列表仍在 main 里，靠左且彼此对齐。 */}
+		<section class="hero">
+			<p>你好，我是 <strong>42520</strong>，一个还在读本科的学生，第一门语言是 C++</p>
+
+			<p>这个站点目前只包含一些笔记</p>
+		</section>
+
 		<main>
-			<!-- 页面上不放可见的大标题（站点名已在 Header 里），
-			     但保留一个 h1 给屏幕阅读器和搜索引擎 -->
+			{/* 页面上不放可见的大标题（站点名已在 Hero），
+			     但保留一个 h1 给屏幕阅读器和搜索引擎 */}
 			<h1 class="sr-only">{SITE_TITLE}</h1>
-
-			<!-- Hero。文字原样来自原来的「关于」页，一个字没改。
-			     刻意做得很薄：首页最值钱的是下面那面分类墙，
-			     Hero 若占满首屏就把它推出去了。 -->
-			<section class="hero">
-				<p>你好，我是 <strong>42520</strong>，一个还在读本科的学生，第一门语言是 C++</p>
-
-				<p>这个站点目前只包含一些笔记</p>
-			</section>
 
 			<p class="stats">{stats.map((item) => <span>{item}</span>)}</p>
 
-			<!-- 分类墙每个分类只列最新 5 篇，多出来的需要有去处。
-			     放在统计行下面而不是墙的下面：这样一屏之内就能看到，
-			     不用先滚到底。 -->
-			<p class="all-notes"><a href={withBase('blog/')}>全部笔记</a></p>
+			{/* 搜索。完整列表已经渲染在同一页上，所以不需要索引也不需要网络请求，
+			     输入时直接在本地过滤 DOM（见文件末尾的 script）。
+			     没有 JS 时列表照常完整可读，只是不能搜。 */}
+			<div class="search">
+				<label class="sr-only" for="search">搜索笔记标题</label>
+				<input id="search" type="search" placeholder="搜索标题…" autocomplete="off" />
+			</div>
 
-			<div class="columns">
+			<div class="notes">
 				{
-					categories.map((cat) => (
-						<section class="card">
-							<h2>{cat.name}</h2>
-							<p class="count">{cat.count} 篇</p>
+					byYear.map((group) => (
+						<section class="year">
+							<h2 class="year-label">{group.year}</h2>
 							<ul>
-								{cat.latest.map((post) => (
+								{group.posts.map((post) => (
 									<li>
-										<a href={withBase(`blog/${postSlug(post)}/`)}>{post.data.title}</a>
+										<a href={withBase(`blog/${postSlug(post)}/`)}>
+											{/* 年份已经在分组标题上了，行内只留月-日 */}
+											<span class="date">{isoDay(post.data.pubDate).slice(5)}</span>
+											<span class="title">{post.data.title}</span>
+										</a>
 									</li>
 								))}
 							</ul>
-							{cat.rest > 0 && <p class="rest">还有 {cat.rest} 篇…</p>}
 						</section>
 					))
 				}
+				<p class="no-match" hidden>没有匹配的笔记</p>
 			</div>
 		</main>
 		<Footer />
+
+		<script>
+			// 全站唯一的客户端脚本：在本地过滤上面已经渲染好的列表。
+			// 没有索引、没有网络请求，输入即响应。删掉它页面依然完整可读。
+			const input = document.querySelector('#search');
+			const notes = document.querySelector('.notes');
+
+			if (input instanceof HTMLInputElement && notes) {
+				const rows = [...notes.querySelectorAll('li')];
+				const years = [...notes.querySelectorAll('.year')];
+				const empty = notes.querySelector('.no-match');
+
+				input.addEventListener('input', () => {
+					const q = input.value.trim().toLowerCase();
+
+					for (const row of rows) {
+						row.hidden = q !== '' && !row.textContent.toLowerCase().includes(q);
+					}
+
+					// 一整年都被过滤掉时，连年份标题一起藏起来
+					for (const year of years) {
+						year.hidden = ![...year.querySelectorAll('li')].some((li) => !li.hidden);
+					}
+
+					if (empty) empty.hidden = rows.some((row) => !row.hidden);
+				});
+			}
+		</script>
 	</body>
 </html>

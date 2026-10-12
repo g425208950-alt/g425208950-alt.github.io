@@ -26,7 +26,7 @@ const { title, description, image = FallbackImage, appendSiteName = true } = Ast
 const rssUrl = new URL(withBase('rss.xml'), Astro.site);
 ---
 
-<!-- Global Metadata -->
+{/* Global Metadata */}
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/png" href={withBase('favicon.png')} />
@@ -35,25 +35,25 @@ const rssUrl = new URL(withBase('rss.xml'), Astro.site);
 <meta name="generator" content={Astro.generator} />
 
 <Font cssVariable="--font-inter" preload />
-<!-- 衬线体只用在文章页标题上，但两个字体都在每一页声明 —— <Font> 生成的是
-     @font-face，浏览器只会下载真正用到的那个文件，没用到不会请求。 -->
+{/* 衬线体只用在文章页标题上，但两个字体都在每一页声明 —— <Font> 生成的是
+     @font-face，浏览器只会下载真正用到的那个文件，没用到不会请求。 */}
 <Font cssVariable="--font-newsreader" preload />
 
-<!-- Canonical URL -->
+{/* Canonical URL */}
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
-<!-- 文章页显示成「TypeScript | 42520」：单看文章名，在收藏夹或者开了十几个
-     标签时分不清是谁的站。首页和列表页例外，它们的标题本来就是站点名。 -->
+{/* Primary Meta Tags */}
+{/* 文章页显示成「TypeScript | 42520」：单看文章名，在收藏夹或者开了十几个
+     标签时分不清是谁的站。首页和列表页例外，它们的标题本来就是站点名。 */}
 <title>{appendSiteName ? `${title} | ${SITE_TITLE}` : title}</title>
 <meta name="description" content={description} />
 
-<!-- Open Graph / Facebook -->
+{/* Open Graph / Facebook */}
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
 
-<!-- Twitter -->
+{/* Twitter */}
 <meta name="twitter:card" content="summary_large_image" />

@@ -1,0 +1,39 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { SITE_TITLE } from '../consts';
+import { basePath } from '../utils/url';
+
+type Props = {
+	/** 正文的标题列表，从 render() 的结果里传进来 */
+	headings?: MarkdownHeading[];
+};
+
+const { headings = [] } = Astro.props;
+
+// 目录只取 h2 和 h3：h4 及更深会让侧栏长到失控，而且文章本身也不该有那么深的层级。
+//
+// 还要跳过 slug 为空的标题。markdown 里像「### ?:」这种整行只有符号的标题，
+// Astro 的 slugger 生成不出 id，如果不过滤，目录里就会出现指向 # 的死链接
+// 和一个点不动的条目。
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3 && h.slug !== '');
+---
+
+<aside class="sidebar">
+	{/* 站点名兼当回首页的入口。页头删掉之后，这里是文章页唯一的回家路 ——
+	     所以窄屏下这条细条必须留着，不能整块藏掉。 */}
+	<a class="sidebar-brand" href={basePath}>{SITE_TITLE}</a>
+
+	{
+		toc.length > 0 && (
+			<nav class="toc" aria-label="本页目录">
+				<ul>
+					{toc.map((h) => (
+						<li class={`depth-${h.depth}`}>
+							<a href={`#${h.slug}`}>{h.text}</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+		)
+	}
+</aside>

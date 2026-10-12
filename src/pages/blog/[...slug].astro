@@ -18,9 +18,11 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await render(post);
+// headings 是正文标题（h1~h6）的列表，带 id 和层级 —— Astro 渲染 markdown 时
+// 已经自动给标题加了 id，所以不需要额外的 rehype 插件就能做目录锚点。
+const { Content, headings } = await render(post);
 ---
 
-<BlogPost {...post.data}>
+<BlogPost {...post.data} headings={headings}>
 	<Content />
 </BlogPost>

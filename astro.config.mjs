@@ -70,5 +70,31 @@ export default defineConfig({
 				],
 			},
 		},
+		{
+			provider: fontProviders.local(),
+			// 衬线体，只用在文章页的标题上（见 global.css 的 --font-serif）。
+			// 同样只打包 latin 子集，两个字重共约 46 KB。中文标题不在这里 ——
+			// Windows 上的中文衬线基本只有宋体，屏幕上不好看，所以中文标题
+			// 仍落到系统黑体，和正文一致。
+			name: 'Newsreader',
+			cssVariable: '--font-newsreader',
+			fallbacks: ['serif'],
+			options: {
+				variants: [
+					{
+						src: ['./src/assets/fonts/newsreader-latin-400-normal.woff2'],
+						weight: 400,
+						style: 'normal',
+						display: 'swap',
+					},
+					{
+						src: ['./src/assets/fonts/newsreader-latin-600-normal.woff2'],
+						weight: 600,
+						style: 'normal',
+						display: 'swap',
+					},
+				],
+			},
+		},
 	],
 });

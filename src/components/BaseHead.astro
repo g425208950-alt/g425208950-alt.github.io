@@ -35,6 +35,9 @@ const rssUrl = new URL(withBase('rss.xml'), Astro.site);
 <meta name="generator" content={Astro.generator} />
 
 <Font cssVariable="--font-inter" preload />
+<!-- 衬线体只用在文章页标题上，但两个字体都在每一页声明 —— <Font> 生成的是
+     @font-face，浏览器只会下载真正用到的那个文件，没用到不会请求。 -->
+<Font cssVariable="--font-newsreader" preload />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

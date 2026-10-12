@@ -29,7 +29,16 @@ root前面为什么加冒号：
 	   想换英文字体：改这里的第一个值 + astro.config.mjs 里的 fonts 配置。 */
 	--font-sans:
 		var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+		'HarmonyOS Sans SC', 'MiSans', 'Noto Sans SC', 'Source Han Sans SC',
 		'Microsoft YaHei', Helvetica, Arial, sans-serif;
+
+	/* 衬线体只给文章页的标题用。--font-newsreader 同样由 BaseHead 的 <Font> 注入。
+	   注意末尾跟的是中文黑体而不是 serif 泛型：如果落到泛型，Windows 上的中文
+	   会走宋体，屏幕上很难看。显式列上黑体，中文标题就和正文一个字形，
+	   只有英文部分变成衬线。 */
+	--font-serif:
+		var(--font-newsreader), Georgia, 'Times New Roman', 'PingFang SC', 'Microsoft YaHei',
+		sans-serif;
 
 	--box-shadow:
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
@@ -41,8 +50,8 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	/* 全站底色：纯黑 + 星点 + 顶部一团冷光，用 radial-gradient 画，不依赖图片。
-	   两条原则，之前搞反过：
+	/* 全站底色：纯黑 + 星点 + 顶部一团冷光，全部用 CSS 渐变画，不依赖任何图片文件。
+	   星点两条原则，之前搞反过：
 	   1. 一层不能只有一颗星，否则那一层本身就是完美网格；所以按「簇」组织，
 	      同一簇共用一个 background-size，但每颗星在格子里的位置都不同。
 	   2. 越亮越大的星越容易被眼睛抓住并认出周期，所以必须放进越大的格子里。
@@ -85,6 +94,10 @@ body {
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
 	line-height: 1.7;
+	/* 深色底上文字容易显得发糊、笔画偏重，这两行让字的边缘更干净。
+	   -webkit- 那行在 Chrome / Safari / Edge 生效，-moz- 那行给 Firefox。 */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 main {
@@ -570,7 +583,10 @@ body.page-home {
 .page-list main {
 	max-width: 880px;
 	margin: 0;
-	padding: 3em 1em 5em;
+	/* 顶部留白给得比底部多很多：页头下面直接顶到内容会显得挤，
+	   空出一段之后整页才有呼吸感。12.5em 在 20px 字号下就是 250px，
+	   用 em 而不是 px 是为了窄屏（字号降到 18px）时它能跟着缩。 */
+	padding: 12.5em 1em 5em;
 }
 
 .page-list .year + .year {
@@ -579,7 +595,7 @@ body.page-home {
 
 /* 年份是这条时间线上的一个刻度 */
 .page-list .year-label {
-	margin: 0 0 0.5em;
+	margin: 0 0 0.8em;
 	font-size: 0.9rem;
 	font-weight: 600;
 	letter-spacing: 0.1em;
@@ -589,7 +605,7 @@ body.page-home {
 /* 竖线用 ul 的 border-left 一次画出来，贯穿该年份下的所有条目 */
 .page-list ul {
 	margin: 0;
-	padding: 0 0 0 1.7rem;
+	padding: 0 0 0 1.2rem;
 	list-style: none;
 	border-left: 1px solid rgba(255, 255, 255, 0.09);
 }
@@ -598,13 +614,13 @@ body.page-home {
 	position: relative;
 }
 
-/* 每一行在竖线上点一个点。top 必须跟着 li a 的 padding 一起改：
-   它是「行内上内边距 0.6em + 半个行高 0.85em」再减去半个点径 0.15em 算出来的，
-   只改 padding 不改这里，点就会偏离第一行文字的中线。 */
+/* 每一行在竖线上点一个点。left 必须和上面 ul 的 padding-left 保持一致，
+   top 必须和 li a 的 padding 联动：它是「行内上内边距 0.6em + 半个行高 0.85em」
+   再减去半个点径 0.15em 算出来的，只改 padding 不改这里，点就会偏离文字中线。 */
 .page-list li::before {
 	content: '';
 	position: absolute;
-	left: -1.7rem;
+	left: -1.2rem;
 	top: 1.3em;
 	width: 6px;
 	height: 6px;
@@ -619,7 +635,7 @@ body.page-home {
 .page-list li a {
 	display: flex;
 	align-items: baseline;
-	gap: 1.25em;
+	gap: 1em;
 	/* 纵向留白：0.35em 时两行之间只有 14px，显得挤；0.6em 给到 24px */
 	padding: 0.6em 0;
 	text-decoration: none;
@@ -694,12 +710,29 @@ body.page-home {
 .page-post .title {
 	margin-bottom: 1em;
 	padding: 1em 0;
-	text-align: center;
+	/* 靠左，和列表页以及页头 logo 共用同一条左边缘（之前是居中） */
+	text-align: left;
 	line-height: 1;
 }
 
 .page-post .title h1 {
 	margin: 0 0 0.5em 0;
+	/* 大号衬线 + 常规字重，这是参考图那种「编辑部」气质的关键：
+	   分量靠尺寸和字体建立，而不是靠加粗。
+	   如果中文标题看着偏细，把 font-weight 调到 600（那个字重也打包了）。 */
+	font-family: var(--font-serif);
+	font-size: 2.6em;
+	font-weight: 600;
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+}
+
+/* 正文里的小标题也用衬线，和文章标题呼应 */
+.page-post .prose h2,
+.page-post .prose h3,
+.page-post .prose h4 {
+	font-family: var(--font-serif);
+	font-weight: 600;
 }
 
 .page-post .date {

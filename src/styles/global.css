@@ -16,7 +16,6 @@ root前面为什么加冒号：
 	   fgColor-default #f0f6fc / fgColor-muted #9198a1 /
 	   fgColor-accent #4493f8 / borderColor-default #3d444d */
 	--accent: #4493f8; /* 链接与强调色 */
-	--accent-dark: #316dca; /* 深一档的蓝，目前代码里没引用 */
 	--black: 240, 246, 252; /* #f0f6fc，标题 */
 	--gray: 145, 152, 161; /* #9198a1，次要文字与阴影 */
 	--gray-light: 61, 68, 77; /* #3d444d，边框与行内代码底 */
@@ -149,15 +148,6 @@ p {
 	margin-bottom: 2em;
 }
 
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-
-input {
-	font-size: 16px;
-}
-
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -264,10 +254,16 @@ footer {
 	gap: 1.5rem;
 }
 
-.brand {
+/* 页脚左栏：图标按钮 + GitHub 用户名。
+   注意这里必须叫 .footer-brand 而不是 .brand —— 页头那个 logo 也叫 .brand，
+   两条规则同名时后定义的会整条覆盖前一条，display: flex 会被换成 inline-block，
+   gap 就失效了。样式搬进全局样式表之后类名不再有组件作用域，重名必须自己避开。 */
+.footer-brand {
 	display: flex;
 	align-items: center;
-	gap: 0.9rem;
+	/* 图标按钮和文字之间留够。注意 rem 是按根字号（16px）算的，
+	   不是 body 上的 20px，所以 1.5rem 是 24px 而不是 30px。 */
+	gap: 1.5rem;
 }
 
 /* 左右两栏共用的「标签：值」。标签压暗、值提亮，两边对称。 */
@@ -329,52 +325,34 @@ footer {
 }
 
 /* ---------- 页头 ---------- */
-/* Header.astro 和 HeaderLink.astro 现在都不带 <style>，规则全在这里。
-   HeaderLink 渲染的 <a> 靠 .nav-link 这个显式 class 被选中，不再依赖
-   Astro 把父组件作用域标记传给子组件根元素那套隐式机制。 */
+/* 页头只剩左上角一个站点名，点击回首页。原来的导航链接整条去掉了：
+   首页现在自带 Hero 和分类墙，文章页只要一个回首页的入口就够。
+   样式放这里而不是组件里，原因见文件末尾那段说明。 */
 header {
 	margin: 0;
 	padding: 0 1em;
 	/* 半透明而不是纯黑：底下的星点会透出来，页头下沿就不会出现一条硬边。
-	   backdrop-filter 把透出来的背景再糊一层，保证导航文字依然清楚。 */
+	   backdrop-filter 把透出来的背景再糊一层，保证文字依然清楚。 */
 	background: rgba(0, 0, 0, 0.55);
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
 }
 
-/* 三栏网格而不是 flex：左右两栏各占一份、中间那栏自然居中。
-   删掉站点名之后导航链接只剩自己一个子元素，若不显式指定栏位，
-   它会自动落进第一栏跑到最左边去——所以下面钉死在第 2 栏。 */
-header nav {
-	display: grid;
-	grid-template-columns: 1fr auto 1fr;
-	align-items: center;
-}
-
-.internal-links {
-	grid-column: 2;
-	/* 导航固定用系统 UI 字体：它在首页会继承 body 的等宽字体，
-	   中文落进等宽栈之后字形很别扭，这块不该跟着终端风格走。 */
-	font-family: var(--font-sans);
-}
-
-.nav-link {
+/* 站点名兼当 logo。左对齐到浏览器留白，不跟随内容容器居中——
+   三个页面的内容宽度并不一样（1100 / 800 / 800），
+   跟随任何一个都会在另外两个页面上错位。 */
+.brand {
 	display: inline-block;
-	text-decoration: none;
-	/* 横向内边距给足：字号降到 0.9rem 之后 0.5em 只剩 7px，三项会挤在一起。
-	   用 em 是为了让它跟着字号一起缩放。 */
-	padding: 1em 1.1em;
-	/* 字号比正文小一档：导航不该和正文抢注意力 */
-	font-size: 0.9rem;
+	padding: 0.9em 0;
+	font-size: 0.95rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
 	color: #dcdfe4;
-	border-bottom: 4px solid transparent;
+	text-decoration: none;
 }
 
-/* 当前页：由白转蓝，下面那条其实是 border，不是 text-decoration */
-.nav-link.active {
-	font-weight: bolder;
+.brand:hover {
 	color: #61afef;
-	border-bottom-color: #61afef;
 }
 
 /* ==================== 页面级样式 ==================== */
@@ -397,6 +375,28 @@ body.page-home {
 	max-width: calc(100% - 2em);
 	margin: 0 auto;
 	padding: 3rem 1em 5rem;
+}
+
+/* Hero：内容来自原来的「关于」页。刻意做得很薄——
+   首页最值钱的是下面那面分类墙，Hero 占满首屏就把它推出去了。
+   字体切换是刻意的：Hero 是「人」，用系统 UI 字体；下面的分类墙是
+   「终端」，保持等宽。中文落进等宽栈字形很难看，所以这里分开。 */
+.page-home .hero {
+	font-family: var(--font-sans);
+	max-width: 42rem;
+	margin: 0 auto 2.75rem;
+	text-align: center;
+}
+
+.page-home .hero p {
+	margin: 0 0 0.7em;
+	font-size: 1.05rem;
+	line-height: 1.7;
+	color: #c9d1d9;
+}
+
+.page-home .hero p:last-child {
+	margin-bottom: 0;
 }
 
 /* 统计行。用 #828a99 —— One Dark 主前景 #abb2bf 压暗一档的冷灰，
@@ -484,6 +484,25 @@ body.page-home {
 	margin: 0.7rem 0 0;
 	font-size: 0.8rem;
 	color: #828a99;
+}
+
+/* 通往完整列表页的入口。分类墙每类只列最新 5 篇，
+   上面那句「还有 N 篇…」的去处就是这里。 */
+.page-home .all-notes {
+	margin: 0;
+	text-align: center;
+	font-size: 0.85rem;
+}
+
+.page-home .all-notes a {
+	color: #828a99;
+	text-decoration: none;
+}
+
+.page-home .all-notes a:hover {
+	color: #61afef;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
 }
 
 @media (max-width: 900px) {

@@ -1,15 +1,14 @@
 ---
-import HeaderLink from './HeaderLink.astro';
+// 导航链接整条去掉了，页头只剩左上角一个站点名，点它回首页。
+// 首页现在自带 Hero 和分类墙，文章页只要一个回首页的入口就够。
+// 这就是「logo」——先用文字顶着，以后有图再换成图。
+//
+// 注释写在 frontmatter 里而不是模板里：模板中的 <!-- --> 是会输出到 HTML 的，
+// 这个组件每页渲染一次，注释就会跟着出现在每个页面上。
+import { SITE_TITLE } from '../consts';
+import { basePath } from '../utils/url';
 ---
 
 <header>
-	<nav>
-		<!-- 站点名先不显示（还没有 logo）。navbar 用三栏网格，中间那栏放导航链接；
-		     等做好 logo，在这里插一个元素并让它落进第一栏即可。 -->
-		<div class="internal-links">
-			<HeaderLink href="/">首页</HeaderLink>
-			<HeaderLink href="/blog">笔记</HeaderLink>
-			<HeaderLink href="/about">关于</HeaderLink>
-		</div>
-	</nav>
+	<a class="brand" href={basePath}>{SITE_TITLE}</a>
 </header>

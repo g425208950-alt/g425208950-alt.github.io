@@ -84,9 +84,16 @@ const stats = [
 			     但保留一个 h1 给屏幕阅读器和搜索引擎 -->
 			<h1 class="sr-only">{SITE_TITLE}</h1>
 
-			<p class="stats">
-				{stats.map((item) => <span>{item}</span>)}
-			</p>
+			<!-- Hero。文字原样来自原来的「关于」页，一个字没改。
+			     刻意做得很薄：首页最值钱的是下面那面分类墙，
+			     Hero 若占满首屏就把它推出去了。 -->
+			<section class="hero">
+				<p>你好，我是 <strong>42520</strong>，一个还在读本科的学生，第一门语言是 C++</p>
+
+				<p>这个站点目前只包含一些笔记</p>
+			</section>
+
+			<p class="stats">{stats.map((item) => <span>{item}</span>)}</p>
 
 			<div class="columns">
 				{
@@ -106,6 +113,9 @@ const stats = [
 					))
 				}
 			</div>
+
+			<!-- 分类墙每个分类只列最新 5 篇，多出来的需要有去处 -->
+			<p class="all-notes"><a href={withBase('blog/')}>全部笔记</a></p>
 		</main>
 		<Footer />
 	</body>

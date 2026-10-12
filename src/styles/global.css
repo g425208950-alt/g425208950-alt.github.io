@@ -94,6 +94,35 @@ main {
 	padding: 3em 1em;
 }
 
+/* ---------- 入场动画 ---------- */
+/* 内容从下方 16px 处淡入并上移到位。纯 CSS，不依赖 JS。
+   只动 main，页头和页脚保持不动——它们在视觉上是「框架」，跟着动反而晃。
+   注意：这是静态站，每次点链接都是整页加载，所以动画每次跳转都会重放，
+   不是只在第一次访问时播一次。 */
+@keyframes rise-in {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+main {
+	/* fill-mode 用 both：动画开始前就先处于 from 状态，避免先闪一下再淡入 */
+	animation: rise-in 0.45s ease-out both;
+}
+
+/* 系统里开了「减少动态效果」的用户不该看到这个动画。
+   直接 animation: none，元素就按正常状态渲染（opacity 1），不会被留在透明状态。 */
+@media (prefers-reduced-motion: reduce) {
+	main {
+		animation: none;
+	}
+}
+
 h1,
 h2,
 h3,
@@ -278,8 +307,21 @@ footer {
 
 .meta-value {
 	color: #9198a1;
-	/* 单击即整段选中，复制用户名或邮箱时不用手动拖选 */
+	/* 单击即整段选中，方便复制 */
 	user-select: all;
+}
+
+/* GitHub 用户名做成了链接，得把「单击整选」关掉 ——
+   否则第一次点击会变成全选文本而不是跳转。悬停时给一点反馈。 */
+a.meta-value {
+	user-select: auto;
+	text-decoration: none;
+}
+
+a.meta-value:hover {
+	color: #61afef;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
 }
 
 /* GitHub 用图标按钮。邮箱故意不做成链接：mailto: 会被系统默认关联到
@@ -406,7 +448,8 @@ body.page-home {
    #828a99 是 6.04:1。
    分隔点 #3e4451（One Dark 的 gutter）纯装饰、不承载信息，所以可以更暗。 */
 .page-home .stats {
-	margin: 0 0 2.5rem;
+	/* 下边距收小：紧接着的「全部笔记」要贴着它，两个一起组成一组元信息 */
+	margin: 0 0 0.4rem;
 	font-size: 0.8rem;
 	color: #828a99;
 }
@@ -487,15 +530,18 @@ body.page-home {
 }
 
 /* 通往完整列表页的入口。分类墙每类只列最新 5 篇，
-   上面那句「还有 N 篇…」的去处就是这里。 */
+   上面那句「还有 N 篇…」的去处就是这里。
+   靠左对齐到统计行，和分类墙第一列共用同一条左边缘；
+   下边距由它承担，把整组元信息和下面的墙分开。
+   字号和灰度都比上面那行统计信息大一档、亮一档：统计信息是「数字」，
+   这个是「入口」，不区分开就会被当成又一条元信息划过去。 */
 .page-home .all-notes {
-	margin: 0;
-	text-align: center;
-	font-size: 0.85rem;
+	margin: 0 0 2.5rem;
+	font-size: 0.95rem;
 }
 
 .page-home .all-notes a {
-	color: #828a99;
+	color: #9da5b4;
 	text-decoration: none;
 }
 
@@ -518,14 +564,12 @@ body.page-home {
 }
 
 /* ---------- 笔记列表页 ---------- */
-/* 单栏、按年份分组的归档列表。之前是两栏卡片，而且模板把第一项做成全宽居中
-   的 2.369rem 大字，最新一篇看起来像页面标题。笔记只会越来越多，
-   按时间线一行一篇比按卡片扫读快，也不需要缩略图。 */
+/* 单栏、按年份分组的归档列表，左侧一条时间线。
+   布局刻意靠左而不是居中：居中在宽屏上两侧留白太大，而且和页头 logo
+   的左边缘对不上；靠左之后两者共用同一条 1em 的留白。 */
 .page-list main {
-	/* 和文章正文同宽，两页的左边缘才能对齐 */
-	width: 800px;
-	max-width: calc(100% - 2em);
-	margin: 0 auto;
+	max-width: 880px;
+	margin: 0;
 	padding: 3em 1em 5em;
 }
 
@@ -533,29 +577,51 @@ body.page-home {
 	margin-top: 2.75em;
 }
 
-/* 年份做分组小标题 */
+/* 年份是这条时间线上的一个刻度 */
 .page-list .year-label {
-	margin: 0 0 0.6em;
+	margin: 0 0 0.5em;
 	font-size: 0.9rem;
 	font-weight: 600;
 	letter-spacing: 0.1em;
 	color: #6e7681;
 }
 
+/* 竖线用 ul 的 border-left 一次画出来，贯穿该年份下的所有条目 */
 .page-list ul {
 	margin: 0;
-	padding: 0;
+	padding: 0 0 0 1.7rem;
 	list-style: none;
+	border-left: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.page-list li {
+	position: relative;
+}
+
+/* 每一行在竖线上点一个点。top 必须跟着 li a 的 padding 一起改：
+   它是「行内上内边距 0.6em + 半个行高 0.85em」再减去半个点径 0.15em 算出来的，
+   只改 padding 不改这里，点就会偏离第一行文字的中线。 */
+.page-list li::before {
+	content: '';
+	position: absolute;
+	left: -1.7rem;
+	top: 1.3em;
+	width: 6px;
+	height: 6px;
+	margin-left: -3.5px;
+	border-radius: 50%;
+	background: #4b5263;
 }
 
 /* 一行一篇：左边日期、右边标题。日期不换行，标题才能对齐成一列。
-   注意这里必须限定到 li a —— 写成 .page-list a 会匹配页面上所有 <a>，
-   连页头那三个导航链接也会被 display: flex 变成块级、竖着堆起来。 */
+   注意必须限定到 li a —— 写成 .page-list a 会匹配页面上所有 <a>，
+   连页头那个 logo 和页脚的联系方式也会被 display: flex 变成块级。 */
 .page-list li a {
 	display: flex;
 	align-items: baseline;
 	gap: 1.25em;
-	padding: 0.35em 0;
+	/* 纵向留白：0.35em 时两行之间只有 14px，显得挤；0.6em 给到 24px */
+	padding: 0.6em 0;
 	text-decoration: none;
 }
 
@@ -563,11 +629,10 @@ body.page-home {
 	flex: none;
 	font-size: 0.85rem;
 	color: #6e7681;
-	/* 日期不换行，也不给它写死宽度。所有日期都是 MM-DD 五位，
-	   配合等宽数字自然就对齐成一列了。
-	   之前写的是 width: 3.2em，而 em 在 width 里按元素自身字号算，
-	   一旦浏览器设了「最小字号」，实际渲染会比盒子宽，日期就在连字符处
-	   断成两行。不指定宽度 + nowrap 对这种情况免疫。 */
+	/* 日期不换行，也不写死宽度。所有日期都是 MM-DD 五位，配合等宽数字
+	   自然就对齐成一列了。之前写死过 width: 3.2em，而 em 在 width 里按
+	   元素自身字号算，浏览器一旦设了「最小字号」，实际渲染会比盒子宽，
+	   日期就在连字符处断成两行。不指定宽度 + nowrap 对这种情况免疫。 */
 	white-space: nowrap;
 	font-variant-numeric: tabular-nums;
 }

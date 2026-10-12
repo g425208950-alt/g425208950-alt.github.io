@@ -95,6 +95,11 @@ const stats = [
 
 			<p class="stats">{stats.map((item) => <span>{item}</span>)}</p>
 
+			<!-- 分类墙每个分类只列最新 5 篇，多出来的需要有去处。
+			     放在统计行下面而不是墙的下面：这样一屏之内就能看到，
+			     不用先滚到底。 -->
+			<p class="all-notes"><a href={withBase('blog/')}>全部笔记</a></p>
+
 			<div class="columns">
 				{
 					categories.map((cat) => (
@@ -113,9 +118,6 @@ const stats = [
 					))
 				}
 			</div>
-
-			<!-- 分类墙每个分类只列最新 5 篇，多出来的需要有去处 -->
-			<p class="all-notes"><a href={withBase('blog/')}>全部笔记</a></p>
 		</main>
 		<Footer />
 	</body>

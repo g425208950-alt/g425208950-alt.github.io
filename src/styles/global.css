@@ -20,7 +20,9 @@ root前面为什么加冒号：
 	--black: 240, 246, 252; /* #f0f6fc，标题 */
 	--gray: 145, 152, 161; /* #9198a1，次要文字与阴影 */
 	--gray-light: 61, 68, 77; /* #3d444d，边框与行内代码底 */
-	--gray-dark: 240, 246, 252; /* #f0f6fc，正文 */
+	--gray-dark: 201, 209, 217; /* #c9d1d9，正文。刻意比标题暗一档：
+	   纯黑底上用 #f0f6fc 约 19:1，笔画边缘会 halation（发晕变粗），
+	   读久了累；#c9d1d9 约 12.3:1，是 GitHub 深色主题同款的落点 */
 
 	/* 英文字体用 Inter：本地自托管、只打包 latin 子集，两个字重共约 47 KB。
 	   --font-inter 这个变量由 BaseHead 里的 <Font> 组件注入，字体文件在
@@ -40,29 +42,45 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	/* 全站底色：纯黑 + 一层平铺星点 + 顶部一团冷光。
-	   星点用 radial-gradient 画，不依赖图片，全站只在这里定义一次。
-	   关键：每一层的 background-size 都不一样，而且刻意取互不成倍数的值
-	   （220/310/370/430/530）。叠加之后要到一个极大的公倍数才重复，
-	   所以看不出规则网格。可调旋钮：每层开头的尺寸是点径，rgba 最后一位是
-	   亮度，size 数值越小越密。 */
+	/* 全站底色：纯黑 + 星点 + 顶部一团冷光，用 radial-gradient 画，不依赖图片。
+	   两条原则，之前搞反过：
+	   1. 一层不能只有一颗星，否则那一层本身就是完美网格；所以按「簇」组织，
+	      同一簇共用一个 background-size，但每颗星在格子里的位置都不同。
+	   2. 越亮越大的星越容易被眼睛抓住并认出周期，所以必须放进越大的格子里。
+	      这里三簇分别是 250 / 430 / 730 px：小格子放密而暗的（读作噪点），
+	      大格子放稀而亮的（重复距离远到看不出来）。三者互不成倍数。
+	   可调旋钮：每颗开头的尺寸是点径，rgba 最后一位是亮度，格子越小越密。 */
 	background-color: #000;
 	background-image:
-		radial-gradient(2px 2px at 24px 36px, rgba(226, 232, 240, 0.8), transparent 60%),
-		radial-gradient(1.5px 1.5px at 120px 96px, rgba(226, 232, 240, 0.55), transparent 60%),
-		radial-gradient(1.2px 1.2px at 190px 170px, rgba(226, 232, 240, 0.38), transparent 60%),
-		radial-gradient(1.5px 1.5px at 70px 200px, rgba(226, 232, 240, 0.5), transparent 60%),
-		radial-gradient(1px 1px at 300px 60px, rgba(226, 232, 240, 0.3), transparent 60%),
-		/* 顶部一团冷光，免得页面上方死黑一片 */
+		/* 第一簇 250px：暗而密，负责铺底噪点 */
+		radial-gradient(1.5px 1.5px at 33px 51px, rgba(226, 232, 240, 0.5), transparent 60%),
+		radial-gradient(1.1px 1.1px at 128px 187px, rgba(226, 232, 240, 0.28), transparent 60%),
+		radial-gradient(1.4px 1.4px at 214px 96px, rgba(226, 232, 240, 0.42), transparent 60%),
+		radial-gradient(1px 1px at 76px 224px, rgba(226, 232, 240, 0.24), transparent 60%),
+		/* 第二簇 430px：中等亮度 */
+		radial-gradient(1.8px 1.8px at 71px 313px, rgba(226, 232, 240, 0.58), transparent 60%),
+		radial-gradient(1.5px 1.5px at 298px 128px, rgba(226, 232, 240, 0.42), transparent 60%),
+		radial-gradient(1.4px 1.4px at 182px 47px, rgba(226, 232, 240, 0.36), transparent 60%),
+		/* 第三簇 730px：最亮最大，但最稀。重复距离 730px，肉眼认不出周期 */
+		radial-gradient(2.2px 2.2px at 143px 517px, rgba(226, 232, 240, 0.72), transparent 60%),
+		radial-gradient(1.9px 1.9px at 604px 233px, rgba(226, 232, 240, 0.6), transparent 60%),
+		radial-gradient(2px 2px at 419px 682px, rgba(226, 232, 240, 0.66), transparent 60%),
+		/* 顶部一团冷光，免得页面上方死黑一片。这一层不重复 */
 		radial-gradient(1200px 520px at 50% -8%, rgba(97, 175, 239, 0.14), transparent 70%);
 	background-size:
-		220px 220px,
-		310px 310px,
-		370px 370px,
+		250px 250px,
+		250px 250px,
+		250px 250px,
+		250px 250px,
 		430px 430px,
-		530px 530px,
+		430px 430px,
+		430px 430px,
+		730px 730px,
+		730px 730px,
+		730px 730px,
 		100% 100%;
-	background-repeat: repeat, repeat, repeat, repeat, repeat, no-repeat;
+	background-repeat: repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat,
+		repeat, no-repeat;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
@@ -88,24 +106,26 @@ h6 {
 	line-height: 1.2;
 }
 
+/* 标题阶梯整体收小。原来是 3.052 / 2.441 / 1.953 / 1.563，在 20px 的正文上
+   一级标题会到 61px，文章标题比正文重太多。这组取值更接近文档站的做法。 */
 h1 {
-	font-size: 3.052em;
+	font-size: 2.1em;
 }
 
 h2 {
-	font-size: 2.441em;
+	font-size: 1.55em;
 }
 
 h3 {
-	font-size: 1.953em;
+	font-size: 1.3em;
 }
 
 h4 {
-	font-size: 1.563em;
+	font-size: 1.15em;
 }
 
 h5 {
-	font-size: 1.25em;
+	font-size: 1.05em;
 }
 
 strong,
@@ -140,6 +160,15 @@ input {
 
 table {
 	width: 100%;
+	border-collapse: collapse;
+}
+
+/* 表格在深色底上不加线就完全读不出行列关系 */
+th,
+td {
+	padding: 0.5em 0.75em;
+	border: 1px solid #3d444d;
+	text-align: left;
 }
 
 img {
@@ -148,26 +177,34 @@ img {
 	border-radius: 8px;
 }
 
+/* 行内代码用半透明白而不是固定灰：white 的 6% 叠在任何表面色上都成立，
+   换成固定灰就得跟着底色一起调。 */
 code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+	padding: 0.15em 0.4em;
+	background-color: rgba(255, 255, 255, 0.06);
+	border-radius: 4px;
 }
 
+/* 代码块要比页面亮一档，绝不能比页面更暗 —— 页面是纯黑，
+   做「更深的代码块」只会变成黑洞。这里给 #16161a 加一条 1px 边。 */
 pre {
-	padding: 1.5em;
+	padding: 1.25em 1.4em;
+	background: #16161a;
+	border: 1px solid #3d444d;
 	border-radius: 8px;
+	overflow-x: auto;
 }
 
 pre>code {
 	all: unset;
 }
 
+/* 引用块不再放大字号（原来 1.333em，比正文还大），改用左侧细线加次级色 */
 blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
 	margin: 0;
-	font-size: 1.333em;
+	padding: 0 0 0 1.1em;
+	border-left: 3px solid #3d444d;
+	color: #9198a1;
 }
 
 hr {
@@ -289,4 +326,304 @@ footer {
 	text-align: center;
 	font-size: 0.85rem;
 	color: #6e7681;
+}
+
+/* ---------- 页头 ---------- */
+/* Header.astro 和 HeaderLink.astro 现在都不带 <style>，规则全在这里。
+   HeaderLink 渲染的 <a> 靠 .nav-link 这个显式 class 被选中，不再依赖
+   Astro 把父组件作用域标记传给子组件根元素那套隐式机制。 */
+header {
+	margin: 0;
+	padding: 0 1em;
+	/* 半透明而不是纯黑：底下的星点会透出来，页头下沿就不会出现一条硬边。
+	   backdrop-filter 把透出来的背景再糊一层，保证导航文字依然清楚。 */
+	background: rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+/* 三栏网格而不是 flex：左右两栏各占一份、中间那栏自然居中。
+   删掉站点名之后导航链接只剩自己一个子元素，若不显式指定栏位，
+   它会自动落进第一栏跑到最左边去——所以下面钉死在第 2 栏。 */
+header nav {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+}
+
+.internal-links {
+	grid-column: 2;
+	/* 导航固定用系统 UI 字体：它在首页会继承 body 的等宽字体，
+	   中文落进等宽栈之后字形很别扭，这块不该跟着终端风格走。 */
+	font-family: var(--font-sans);
+}
+
+.nav-link {
+	display: inline-block;
+	text-decoration: none;
+	/* 横向内边距给足：字号降到 0.9rem 之后 0.5em 只剩 7px，三项会挤在一起。
+	   用 em 是为了让它跟着字号一起缩放。 */
+	padding: 1em 1.1em;
+	/* 字号比正文小一档：导航不该和正文抢注意力 */
+	font-size: 0.9rem;
+	color: #dcdfe4;
+	border-bottom: 4px solid transparent;
+}
+
+/* 当前页：由白转蓝，下面那条其实是 border，不是 text-decoration */
+.nav-link.active {
+	font-weight: bolder;
+	color: #61afef;
+	border-bottom-color: #61afef;
+}
+
+/* ==================== 页面级样式 ==================== */
+/* 三个页面各自的 <style> 都搬到了这里，靠 body 上的 page-* class 区分。
+   原因是 dev 模式下页面／组件内的 <style> 会被浏览器缓存的旧 Vite 模块覆盖，
+   改动静默失效（详见 AGENTS.md）；global.css 是按普通样式表下发的，没有这个问题。
+   class 挂在 body 上，所以下面统一用 .page-x 作前缀——特异性大致相当于原来的
+   [data-astro-cid] 作用域，对全局规则（body / main / h1~h6 / a / ul）的覆盖关系不变。 */
+
+/* ---------- 首页 ---------- */
+body.page-home {
+	/* 首页单独用等宽字体拿到命令行观感，其余页面仍走 --font-sans */
+	font-family:
+		'Cascadia Mono', 'JetBrains Mono', Consolas, 'DejaVu Sans Mono', 'Sarasa Mono SC',
+		'Microsoft YaHei', monospace;
+}
+
+.page-home main {
+	width: 1100px;
+	max-width: calc(100% - 2em);
+	margin: 0 auto;
+	padding: 3rem 1em 5rem;
+}
+
+/* 统计行。用 #828a99 —— One Dark 主前景 #abb2bf 压暗一档的冷灰，
+   和首页其余色值同一套色相。
+   注意这里没有用 One Dark 的注释灰 #5c6370：那是给语法高亮用的，
+   在纯黑底上只有 3.47:1，低于正文 4.5:1 的下限，当小字号元信息读起来会吃力。
+   #828a99 是 6.04:1。
+   分隔点 #3e4451（One Dark 的 gutter）纯装饰、不承载信息，所以可以更暗。 */
+.page-home .stats {
+	margin: 0 0 2.5rem;
+	font-size: 0.8rem;
+	color: #828a99;
+}
+
+.page-home .stats span + span::before {
+	content: '·';
+	margin: 0 0.7em;
+	color: #3e4451;
+}
+
+/* 多列瀑布：每列一条，像终端里的分栏输出 */
+.page-home .columns {
+	columns: 3;
+	column-gap: 2.5rem;
+}
+
+.page-home .card {
+	/* 禁止一个块被拆到相邻两列去 */
+	break-inside: avoid;
+	margin: 0 0 1.75rem;
+	/* 一层压得很低的底色 + 一条细边，让分类从纯黑底和星点里浮出来。
+	   底色从 Primer 的 #0d1117 抬到 #1e222a（约 13% 亮度，带 One Dark 的冷调），
+	   和底色的层次更清楚。边框用 10% 白而不是固定灰：半透明会跟着底色走，
+	   以后换底色不用重新配边框。 */
+	padding: 1.1rem 1.2rem;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 10px;
+	background: #1e222a;
+}
+
+/* global.css 把 h1~h6 设成了近黑色，深色底上必须逐项覆盖。分类名给品红 */
+.page-home .card h2 {
+	margin: 0 0 0.2rem;
+	font-size: 1.15rem;
+	letter-spacing: 0;
+	color: #c678dd;
+}
+
+/* 篇数给黄色 */
+.page-home .count {
+	margin: 0 0 0.7rem;
+	font-size: 0.8rem;
+	color: #e5c07b;
+}
+
+.page-home .card ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.page-home .card li {
+	margin-bottom: 0.3rem;
+	font-size: 0.9rem;
+	line-height: 1.45;
+}
+
+.page-home .card li:last-child {
+	margin-bottom: 0;
+}
+
+/* 文章标题给蓝色，对应终端 ls 输出里的目录名 */
+.page-home .card a {
+	color: #61afef;
+	text-decoration: none;
+}
+
+.page-home .card a:hover {
+	text-decoration: underline;
+}
+
+/* 「还有 N 篇…」也是元信息，和统计行同一档灰。
+   之前用的 #dcdfe4 和正文白一样亮，作为补充说明比正文还显眼。 */
+.page-home .rest {
+	margin: 0.7rem 0 0;
+	font-size: 0.8rem;
+	color: #828a99;
+}
+
+@media (max-width: 900px) {
+	.page-home .columns {
+		columns: 2;
+	}
+}
+
+@media (max-width: 600px) {
+	.page-home .columns {
+		columns: 1;
+	}
+}
+
+/* ---------- 笔记列表页 ---------- */
+/* 单栏、按年份分组的归档列表。之前是两栏卡片，而且模板把第一项做成全宽居中
+   的 2.369rem 大字，最新一篇看起来像页面标题。笔记只会越来越多，
+   按时间线一行一篇比按卡片扫读快，也不需要缩略图。 */
+.page-list main {
+	/* 和文章正文同宽，两页的左边缘才能对齐 */
+	width: 800px;
+	max-width: calc(100% - 2em);
+	margin: 0 auto;
+	padding: 3em 1em 5em;
+}
+
+.page-list .year + .year {
+	margin-top: 2.75em;
+}
+
+/* 年份做分组小标题 */
+.page-list .year-label {
+	margin: 0 0 0.6em;
+	font-size: 0.9rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	color: #6e7681;
+}
+
+.page-list ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* 一行一篇：左边日期、右边标题。日期不换行，标题才能对齐成一列。
+   注意这里必须限定到 li a —— 写成 .page-list a 会匹配页面上所有 <a>，
+   连页头那三个导航链接也会被 display: flex 变成块级、竖着堆起来。 */
+.page-list li a {
+	display: flex;
+	align-items: baseline;
+	gap: 1.25em;
+	padding: 0.35em 0;
+	text-decoration: none;
+}
+
+.page-list .date {
+	flex: none;
+	font-size: 0.85rem;
+	color: #6e7681;
+	/* 日期不换行，也不给它写死宽度。所有日期都是 MM-DD 五位，
+	   配合等宽数字自然就对齐成一列了。
+	   之前写的是 width: 3.2em，而 em 在 width 里按元素自身字号算，
+	   一旦浏览器设了「最小字号」，实际渲染会比盒子宽，日期就在连字符处
+	   断成两行。不指定宽度 + nowrap 对这种情况免疫。 */
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+.page-list .title {
+	color: #c9d1d9;
+	transition: color 0.15s ease;
+}
+
+.page-list li a:hover .title {
+	color: #4493f8;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+/* ---------- 文章详情页 ---------- */
+.page-post main {
+	width: calc(100% - 2em);
+	max-width: 100%;
+	margin: 0;
+}
+
+.page-post .hero-image {
+	width: 100%;
+}
+
+.page-post .hero-image img {
+	display: block;
+	margin: 0 auto;
+	border-radius: 12px;
+	box-shadow: var(--box-shadow);
+}
+
+.page-post .prose {
+	/* 800px：20px 字号下一行约 40 个中文字，已经贴着「30–40 字」的推荐上限。
+	   再宽就该动字号了，否则单行太长、眼睛回行容易串行。 */
+	width: 800px;
+	max-width: calc(100% - 2em);
+	margin: auto;
+	padding: 1em;
+	color: rgb(var(--gray-dark));
+	/* 深色下亮度反转会削弱字形的边缘轮廓，行高比浅色再放宽一点 */
+	line-height: 1.75;
+}
+
+/* 正文里的链接加下划线。WCAG 要求不能只靠颜色区分链接，
+   而深色底上「蓝字 vs 白字」的色相差本来就比浅色底更难分辨。
+   下划线用半透明的强调色，悬停时才变实。 */
+.page-post .prose a {
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.page-post .prose a:hover {
+	text-decoration-color: currentColor;
+}
+
+.page-post .title {
+	margin-bottom: 1em;
+	padding: 1em 0;
+	text-align: center;
+	line-height: 1;
+}
+
+.page-post .title h1 {
+	margin: 0 0 0.5em 0;
+}
+
+.page-post .date {
+	margin-bottom: 0.5em;
+	/* 日期是元信息，比正文再暗一档，别在阅读时抢注意力 */
+	color: #6e7681;
+}
+
+.page-post .last-updated-on {
+	font-style: italic;
 }

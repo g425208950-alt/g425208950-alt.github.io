@@ -1,9 +1,7 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { postSlug } from '../../utils/post';
@@ -14,104 +12,55 @@ const showDrafts = import.meta.env.DEV;
 const posts = (await getCollection('blog'))
 	.filter((post) => showDrafts || !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// frontmatter 里写的是 2026-10-11 这种，会被解析成 UTC 零点。
+// 所以取年月日要用 ISO 字符串，不能用 getFullYear()/getDate()——
+// 后者按本地时区算，在 UTC 负偏移的机器上会整体差一天。
+const isoDay = (date) => date.toISOString().slice(0, 10);
+
+// 按年份分组。posts 已经按日期倒序，所以顺序遍历、遇到新的一年就开一组，
+// 天然就是「新的年份在前」，不需要再排一次。
+const byYear = [];
+for (const post of posts) {
+	const year = isoDay(post.data.pubDate).slice(0, 4);
+	const last = byYear[byYear.length - 1];
+	if (!last || last.year !== year) {
+		byYear.push({ year, posts: [post] });
+	} else {
+		last.posts.push(post);
+	}
+}
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} appendSiteName={false} />
 	</head>
-	<body>
+	<body class="page-list">
 		<Header />
 		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={withBase(`blog/${postSlug(post)}/`)}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+			<!-- 页面上不放大标题，但给屏幕阅读器和搜索引擎留一个 -->
+			<h1 class="sr-only">全部笔记</h1>
+
+			{
+				byYear.map((group) => (
+					<section class="year">
+						<h2 class="year-label">{group.year}</h2>
+						<ul>
+							{group.posts.map((post) => (
+								<li>
+									<a href={withBase(`blog/${postSlug(post)}/`)}>
+										{/* 年份已经在分组标题上了，行内只留月-日 */}
+										<span class="date">{isoDay(post.data.pubDate).slice(5)}</span>
+										<span class="title">{post.data.title}</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
 		</main>
 		<Footer />
 	</body>

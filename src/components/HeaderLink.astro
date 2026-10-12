@@ -2,7 +2,11 @@
 import type { HTMLAttributes } from 'astro/types';
 import { basePath, withBase } from '../utils/url';
 
-type Props = HTMLAttributes<'a'>;
+// 样式不写在这个文件里：.nav-link 和 .nav-link.active 定义在 global.css。
+// 以前 Header.astro 能选中这个 <a>，靠的是 Astro 把父组件的作用域标记沿组件树
+// 传给子组件的根元素——那是个隐式依赖，样式改由普通样式表下发后就断了。
+// 现在换成一个显式的 class，两边都不用再关心作用域。
+type Props = HTMLAttributes<'a'>; 
 
 const { href, class: className, ...props } = Astro.props;
 
@@ -16,16 +20,6 @@ const subpath = pathname.match(/[^\/]+/g);
 const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 ---
 
-<a href={resolvedHref} class:list={[className, { active: isActive }]} {...props}>
+<a href={resolvedHref} class:list={['nav-link', className, { active: isActive }]} {...props}>
 	<slot />
 </a>
-<style>
-	a {
-		display: inline-block;
-		text-decoration: none;
-	}
-	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
-	}
-</style>

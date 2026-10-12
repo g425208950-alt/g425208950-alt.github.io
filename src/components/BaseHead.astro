@@ -13,11 +13,14 @@ interface Props {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
+	/** 是否在标签页标题后面追加站点名。首页和列表页传进来的 title 本身就是
+	 *  站点名，再拼一次会变成「42520 | 42520」，所以它们传 false 关掉。 */
+	appendSiteName?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+const { title, description, image = FallbackImage, appendSiteName = true } = Astro.props;
 
 // 静态资源同样要带 base，否则项目站点下会去根路径找 favicon / sitemap。
 const rssUrl = new URL(withBase('rss.xml'), Astro.site);
@@ -37,7 +40,9 @@ const rssUrl = new URL(withBase('rss.xml'), Astro.site);
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{title}</title>
+<!-- 文章页显示成「TypeScript | 42520」：单看文章名，在收藏夹或者开了十几个
+     标签时分不清是谁的站。首页和列表页例外，它们的标题本来就是站点名。 -->
+<title>{appendSiteName ? `${title} | ${SITE_TITLE}` : title}</title>
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->

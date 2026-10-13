@@ -3,7 +3,10 @@ title: 学习python
 description: 在C++的基础上学习Python📖
 pubDate: 2026-10-02
 draft: true
+aliases:
+  - py
 ---
+
 
 
 
@@ -19,7 +22,6 @@ pylance的功能包含：
 
 - 
 
-1. 
 
 - 
 
@@ -27,3 +29,6 @@ pylance的功能包含：
 
 ## Smart Send
 
+## 语法
+### range(n)
+是一个惰性序列，同类的还有生成器，map/filter的返回值，文件对象

@@ -51,8 +51,9 @@ draft: true
 | W3C      | World Wide Web Consortium                                              |
 | WHATWG   | Web Hypertext Application Technology Working Group                     |
 ## 待整理
-| 缩写   | 全称          |
-| ---- | ----------- |
-| WASM | WebAssembly |
-|      |             |
-|      |             |
+| 缩写   | 全称                        |
+| ---- | ------------------------- |
+| WASM | WebAssembly               |
+| DOI  | Digital Object Identifier |
+| WIP  | Work In Process           |
+| AFK  | Away From KeyBoard        |

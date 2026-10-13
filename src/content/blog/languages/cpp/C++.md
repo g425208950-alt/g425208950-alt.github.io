@@ -20,6 +20,21 @@ pubDate: 2026-10-05
 
 C++11 引入的。同一批属性还有 `[[deprecated]]`（C++14）、`[[nodiscard]]`（C++17）、`[[maybe_unused]]`（C++17）等，都在往这个统一属性语法上靠，取代了之前编译器各自的 `__attribute__((noreturn))`、`__declspec(noreturn)` 这类非标准写法。
 
+### 初始化列表
+`std::vector<int> v{0, 1, 2, 3, 4, 5};`
+### iota
+#### 来源
+名称来自 希腊字母 iota（ι），编程传统里常用来表示"生成连续整数序列"，最早源于 APL(A Programming Language) 语言的 iota 函数。不是某个长词的缩写。
+#### 写法
+```c++
+std::iota(v.begin(), v.end(), 10); // 10,11,12,...
+std::iota(v.begin(), v.end(), -3); // -3,-2,-1,0,1,...
+```
+#### 作用
+
+等同于`std::vector<int> v{0, 1, 2, 3, 4, 5};`但支持更大的范围或动态生成。
+
+
 ## C++14
 ### `[[deprecated]]`
 

@@ -1,3 +1,10 @@
+---
+title: TOML 速查
+description: TOML 的全称与基本写法
+pubDate: 2026-09-29
+draft: true
+---
+
 ## 全称
 全称 Tom's Obvious Minimal Language，语法接近ini
 
@@ -15,4 +22,4 @@ port = 8080             # 键名可以和全局重名，因为在不同表下
 [database]
 url = "postgres://..."  # 嵌套用 [a.b] 或点号写 a.b = 1
 ```
-常见用途：Rust 的 Cargo.toml、Python 的 pyproject.toml、Hugo 和 Netlify 的配置。你现在这套 DSH 里也有，比如 Codex 用的 requirements.toml。
+常见用途：Rust 的 Cargo.toml、Python 的 pyproject.toml、Hugo 和 Netlify 的配置。

@@ -1,7 +1,7 @@
 ---
 title: npm用法
 description: 日常遇到的npm的疑问
-pubDate: 2026/9/30
+pubDate: 2026-09-30
 draft: true
 ---
 

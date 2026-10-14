@@ -57,6 +57,5 @@ PAROL6 的 6
 | URDF | Unified Robot Description Format（统一机器人描述格式）                            |
 | ROS  | Robot Operating System（机器人操作系统）                                        |
 | CAN  | Controller Area Network                                                |
-| STL  | Stereolithography                                                      |
+| STL  | Standard Tessellation Language（STereoLithography，3D 打印语境下指模型文件格式）        |
 | FDM  | Fused Deposition Modeling                                              |
-| CAN  | Controller Area Network                                                |

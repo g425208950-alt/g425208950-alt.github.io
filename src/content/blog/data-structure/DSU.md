@@ -9,7 +9,7 @@ aliases:
 ## 全称
 Disjoint Set Union
 ## 代码
-python
+### python
 ```python
 parent = list(range(n)) // 建一个长度为n的列表，赋给parent
 rank = [0] * n
@@ -29,7 +29,7 @@ def union(a, b):
     if rank[ra] == rank[rb]:
         rank[ra] += 1
 ```
-C++ （手写）
+### C++（手写）
 ```c++
 class DSU {
 public:

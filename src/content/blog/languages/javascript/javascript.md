@@ -1,7 +1,7 @@
 ---
 title: JavaScript学习
 description: 简单学一下JavaScript
-pubDate: 2026-10-1
+pubDate: 2026-10-01
 draft: true
 aliases:
   - JS
@@ -15,7 +15,7 @@ ECMA的全称是“European Computer Manufacturers Association”，中文名称
 ### ESM是什么 
 
 ECMAScript Modules，JS 官方的模块标准，用 `import`/`export` 语法。
-于CommonJS对应。
+和 CommonJS 对应。
 ### CommonJS(CJS)
 
 与ESM相对，用 `require`/`module.exports`，Node 早期默认的模块系统。

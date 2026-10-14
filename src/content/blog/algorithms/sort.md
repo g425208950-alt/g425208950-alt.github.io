@@ -3,7 +3,7 @@ title: 排序的基本知识
 description: 记录一些排序关键点
 pubDate: 2026-10-03
 ---
-[Sort](Sort.cpp)
+[Sort](../attachment/Sort.cpp)
 注：本文代码需要 `<vector>`、`<algorithm>`（`std::swap`、`std::min`）；用到 `std::rand()` 的地方还需 `<cstdlib>` 和 `<ctime>`，并在 `main` 开头调用一次 `std::srand(std::time(nullptr))`，否则每次运行随机序列相同。
 
 `std::pair` 需要 `<utility>`。

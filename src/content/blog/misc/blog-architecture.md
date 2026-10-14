@@ -6,7 +6,7 @@ draft: true
 ---
 ## Obsidian
 [[Astro]]
-[JavaScript](JavaScript.md)
+[JavaScript](../languages/javascript/javascript.md)
 
 
 ## <!--写博客的要点 (第一次用markdown写博客，给自己加一个快捷链接查用法)-->

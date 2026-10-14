@@ -1,7 +1,7 @@
 ---
 title: HTML
 description: HTML
-pubDate: 2026-10-1
+pubDate: 2026-10-01
 draft: true
 ---
 
@@ -55,8 +55,6 @@ ps: 本文内容有部分内容引用自菜鸟教程
 | WHATWG | Web Hypertext Application Technology Working Group      |
 | SGML   | Standard Generalized Markup Language（XML是其简化子集） |
 | DOM    | Document Object Model                                   |
-|        |                                                         |
-|        |                                                         |
 
 
 
@@ -71,8 +69,6 @@ ps: 本文内容有部分内容引用自菜鸟教程
 | href     | hypertext reference |
 | img      | image               |
 | hr       | horizontal rule     |
-|          |                     |
-|          |                     |
 
 ## HTML基础
 
@@ -121,7 +117,7 @@ noreferrer：不告诉对方你从哪来。你点一个外部链接时，浏览�
 <div id="section1">这是第1部分</div>
 
 ```
-###### hrelang
+###### hreflang
 >指定链接的目标URL的语言
 ```html
 <a href="https://www.example.com/es" hreflang="es">访问西班牙语网站</a>
@@ -152,7 +148,6 @@ noreferrer：不告诉对方你从哪来。你点一个外部链接时，浏览�
 | `href=""`                   | 刷新当前页面        | 是     | 需要页面刷新时          |
 | `href="about:blank"`        | 打开空白页面        | 是     | 新窗口打开空白页面        |
 | `role="button"`             | 链接表现为按钮，无默认行为 | 否     | 配合 JS 实现按钮功能，无跳转 |
-|                             |               |       |                  |
 
 ### 图像
 
@@ -228,7 +223,6 @@ META 元素通常用于指定网页的描述，关键词，文件的最后修改
 3. `rel="canonical"` 是"这个页面的规范地址"（给搜索引擎看）
 4. `rel="alternate"` 是"同一内容的另一种版本"<!--你的 RSS 就是-->
 5. `rel="preload"` 是"提前把它下下来，我马上要用"
-6. 
 
 ### HTML的CSS语法
 

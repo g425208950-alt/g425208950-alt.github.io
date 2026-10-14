@@ -46,4 +46,4 @@ JavaScript 本身只定义语法和语义（变量、函数、async 等），由
 
 > 引擎层面的关系要分清楚：Node 底层用 V8 引擎执行 JS，V8 才负责把 JS 编译成机器码。所以链条是 JS 规范 → V8 引擎实现它 → Node 在 V8 外面套一层 C++ 和系统 API，让 JS 能做后端的事。具体差异可以举几个：浏览器里没有 `require` 也没有 `fs`；Node 里没有 `window` 和 DOM，写不了 `document.getElementById`。所以"能跑 JS 的地方"不等于"能力一样"，取决于宿主。
 >
-> DOM` 是 Document Object Model，文档对象模型。它是浏览器把 HTML 解析成的一棵可操作的树，JS 通过它改页面，比如 `document.getElementById('app')` 拿到某个元素、改它的内容或样式。DOM 是浏览器提供的，Node 里没有，因为 Node 不显示网页。
+> `DOM` 是 Document Object Model，文档对象模型。它是浏览器把 HTML 解析成的一棵可操作的树，JS 通过它改页面，比如 `document.getElementById('app')` 拿到某个元素、改它的内容或样式。DOM 是浏览器提供的，Node 里没有，因为 Node 不显示网页。

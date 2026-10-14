@@ -54,9 +54,7 @@ import versions from '../data/versions.json';
 
 API 文档、组件文档常有大量重复结构：参数表、属性列表、示例块。做成组件后，写一篇新文档就是填参数。
 
-```
-Mdx
-
+```Mdx
 import PropsTable from '../components/PropsTable.astro';
 
 <PropsTable data={[

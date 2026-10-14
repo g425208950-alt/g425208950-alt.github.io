@@ -1,10 +1,8 @@
 ---
 title: Obsidian
 description: Obsidian
-pubDate: 2026/10/03
+pubDate: 2026-10-03
 draft: true
 ---
 
-
-
-[[excalidraw]]
+[[Excalidraw]]

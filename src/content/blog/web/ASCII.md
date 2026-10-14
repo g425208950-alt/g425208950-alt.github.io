@@ -1,7 +1,7 @@
 ---
 title: ASCII相关知识点
 description: 在写博客之前脑子里其实没有ASCII的详尽知识，知道这是个简易的字符表，却因为懒惰没有真的去了解清楚
-pubDate: 2026/10/03
+pubDate: 2026-10-03
 draft: true
 ---
 

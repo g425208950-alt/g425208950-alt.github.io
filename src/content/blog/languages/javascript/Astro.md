@@ -9,7 +9,7 @@ tags: 前端
 [[json-usage]]
 [[npm]]
 [[html]]
-[blog-architecture](blog-architecture.md)
+[blog-architecture](../../misc/blog-architecture.md)
 
 ## 整体介绍
 astro底层是**Vite**
@@ -28,7 +28,7 @@ astro文件永远都有两个区域，是astro自己的"代码栅栏"
 | RSC | React Server Components                     |
 ## 一些命名方法
 
-[Naming-Conventions](Naming-Conventions.md)
+[Naming-Conventions](../../misc/Naming-Conventions.md)
 
 ## 环境变量
 

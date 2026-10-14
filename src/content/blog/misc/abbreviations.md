@@ -51,9 +51,16 @@ draft: true
 | W3C      | World Wide Web Consortium                                              |
 | WHATWG   | Web Hypertext Application Technology Working Group                     |
 ## 待整理
-| 缩写   | 全称                        |
-| ---- | ------------------------- |
-| WASM | WebAssembly               |
-| DOI  | Digital Object Identifier |
-| WIP  | Work In Process           |
-| AFK  | Away From KeyBoard        |
+| 缩写   | 全称                                                              |
+| ---- | --------------------------------------------------------------- |
+| WASM | WebAssembly                                                     |
+| DOI  | Digital Object Identifier                                       |
+| WIP  | Work In Process                                                 |
+| AFK  | Away From KeyBoard                                              |
+| AC   | Accepted                                                        |
+| LLVM | Low Level Virtual Machine                                       |
+| REST | Representational State Transfer 表述性状态转移，把一切都当做法，用URL标识，用HTTP方法。 |
+| ACL  | Access Control List                                             |
+| RE   | Reverse Engineering                                             |
+| kind | k8s in Docker                                                   |
+| MFT  | 主文件表                                                            |

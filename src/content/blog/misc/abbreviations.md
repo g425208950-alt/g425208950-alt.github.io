@@ -64,3 +64,11 @@ draft: true
 | RE   | Reverse Engineering                                             |
 | kind | k8s in Docker                                                   |
 | MFT  | 主文件表                                                            |
+| ECS  | Elastic Compute Service/Elastic Container Service               |
+| SWAS | Simple Application Server                                       |
+| CVM  | Cloud Virtual Machine                                           |
+| ESSD | Enhanced SSD                                                    |
+| ISP  | Internet Content Provider                                       |
+| VPS  | Virtual Private Cloud                                           |
+| tmux | Terminal Multiplexer                                            |
+| FTP  | File Transfer Protocol                                          |

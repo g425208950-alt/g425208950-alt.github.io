@@ -12,7 +12,11 @@ draft: true
 `refs/tags/` 是标签。注意标签文件里可能直接存 tag 对象的哈希，一层套一层，所以要 `git show-ref --dereference` 剥开看真正的 commit。
 ### push
 HTTPS和SSH都同时支持clone和push，github在2021年弃用账号和密码后，https改用PAT(Personal Access Token)当密码。
+### fetch
 ### pull
+### reset
+### branch
+### switch
 
 ### checkout
 
@@ -26,11 +30,16 @@ HTTPS和SSH都同时支持clone和push，github在2021年弃用账号和密码�
 
 ### submodule
 #### 基础介绍
-submodule 是"一个 git 仓库里嵌了另一个 git 仓库"的机制，外层仓库只记录"你该从哪个地址、拿哪个版本"，不记录里面的文件内容。
-外层仓库里有个子目录，进这个子目录会发现它自己是个完整 git 仓库（有 `.git`）。外层仓库根目录有个 `.gitmodules` 文件，记着子模块的地址和路径；还有个特殊==🟠gitlink==条目，记着子模块该停在哪个 commit。
+submodule 是一个仓库中嵌套另一个仓库时需要的指令
+外层仓库中有许多子目录，一些子目录中有`.git`,那这些子目录就是子仓库，外层仓库根目录中会有一个`gitmodules`文件，用来记录子模块的`name、path、URL`，
+#### 指令
 普通clone仓库时，内层的子仓库默认是空的，所以得这样clone:
 `git clone --recurse-submodules 外层仓库地址`
 或者先普通clone再`git submodule update --init --recursive`
+update 是submodule 的子命令，--init是
+
+`git submodule status` 可以查看子模块状态，如果前面有 '-' 说明目录是空的，源码不在磁盘上。
+
 
 #### 实际使用
 这是在一个git仓库里加上一个submodule子仓库的代码。
@@ -44,7 +53,7 @@ git submodule add https://github.com/flazz/vim-colorschemes.git
 git submodule update --init --recursive
 ```
 
-`update`：按照父仓库记录的那个 commit，去把子模块的代码检出到正确版本。不是子模块的最新版，是。（这里写漏了，待补）
+`update`：按照父仓库记录的那个 commit，去把子模块的代码检出到正确版本。不是子模块的最新版，是在
 ### remote
 `git remote -v` (verbose)列出所有远程和它们的地址，
 `git remote`只列远程的名字，一行一个

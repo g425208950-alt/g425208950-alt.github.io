@@ -34,7 +34,7 @@ draft: true
 | img      | image                                                                  |
 | JSX      | JavaScript XML                                                         |
 | MDX      | Markdown + JSX                                                         |
-| p        | paragraph                                                              |
+|          |                                                                        |
 | PETG     | Polyethylene Terephthalate Glycol（聚对苯二甲酸乙二醇酯-1,4-环己烷二甲醇酯，即 PET 加乙二醇改性） |
 | px       | pixel                                                                  |
 | rem      | root em （相对根元素html）                                                    |
@@ -51,24 +51,48 @@ draft: true
 | W3C      | World Wide Web Consortium                                              |
 | WHATWG   | Web Hypertext Application Technology Working Group                     |
 ## 待整理
-| 缩写   | 全称                                                              |
-| ---- | --------------------------------------------------------------- |
-| WASM | WebAssembly                                                     |
-| DOI  | Digital Object Identifier                                       |
-| WIP  | Work In Process                                                 |
-| AFK  | Away From KeyBoard                                              |
-| AC   | Accepted                                                        |
-| LLVM | Low Level Virtual Machine                                       |
-| REST | Representational State Transfer 表述性状态转移，把一切都当做法，用URL标识，用HTTP方法。 |
-| ACL  | Access Control List                                             |
-| RE   | Reverse Engineering                                             |
-| kind | k8s in Docker                                                   |
-| MFT  | 主文件表                                                            |
-| ECS  | Elastic Compute Service/Elastic Container Service               |
-| SWAS | Simple Application Server                                       |
-| CVM  | Cloud Virtual Machine                                           |
-| ESSD | Enhanced SSD                                                    |
-| ISP  | Internet Content Provider                                       |
-| VPS  | Virtual Private Cloud                                           |
-| tmux | Terminal Multiplexer                                            |
-| FTP  | File Transfer Protocol                                          |
+| 缩写    | 全称                                                              |
+| ----- | --------------------------------------------------------------- |
+| WASM  | WebAssembly                                                     |
+| DOI   | Digital Object Identifier                                       |
+| WIP   | Work In Process                                                 |
+| AFK   | Away From KeyBoard                                              |
+| AC    | Accepted                                                        |
+| LLVM  | Low Level Virtual Machine                                       |
+| REST  | Representational State Transfer 表述性状态转移，把一切都当做法，用URL标识，用HTTP方法。 |
+| ACL   | Access Control List                                             |
+| RE    | Reverse Engineering                                             |
+| kind  | k8s in Docker                                                   |
+| MFT   | 主文件表                                                            |
+| ECS   | Elastic Compute Service/Elastic Container Service               |
+| SWAS  | Simple Application Server                                       |
+| CVM   | Cloud Virtual Machine                                           |
+| ESSD  | Enhanced SSD                                                    |
+| ISP   | Internet Content Provider                                       |
+| VPS   | Virtual Private Cloud                                           |
+| tmux  | Terminal Multiplexer                                            |
+| FTP   | File Transfer Protocol                                          |
+| BIOS  | Basic Input Output System                                       |
+| UEFI  | Unified Extensible Firmwware Interface                          |
+| MBR   | Master Boot Record                                              |
+| GRUB  | GRand Unified Bootloader                                        |
+| NVRAM | Non-Volatile Random Access Memory                               |
+| Wine  | Wine Is Not An Emulator                                         |
+| UTC   | Coordinated Universal Time                                      |
+| EFI   | Extensible Firmware Interface                                   |
+| FAT32 | File Allocation Table 32                                        |
+| ESP   | EFI System Partition                                            |
+| RTC   | Real Time Clock                                                 |
+| DCO   | Developer Certificate of Origin                                 |
+| UGC   | User-Generated Content                                          |
+| GPT   | Generative Pre-trained Transformer/GUIDPartition Table          |
+| MBR   | Master Boot Record                                              |
+| NVMe  | Non-Volatile Memory Express                                     |
+| PCle  | Periphernal Component Interconnect Express                      |
+| DRAM  | Dynamic RAM                                                     |
+| TLC   | Trinary-Level Cell                                              |
+| MTM   | Machine Type Model                                              |
+| HBM   | High Bandwidth Memory                                           |
+| NTFS  | New Technology File System                                      |
+| POSIX | Portable Operating System Interface<br>                         |
+| IEEE  | Institute of Electrical and Electronics Engineers               |

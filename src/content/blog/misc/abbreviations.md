@@ -50,6 +50,7 @@ draft: true
 | URDF     | Unified Robot Description Format（统一机器人描述格式）                            |
 | W3C      | World Wide Web Consortium                                              |
 | WHATWG   | Web Hypertext Application Technology Working Group                     |
+|          |                                                                        |
 ## 待整理
 | 缩写    | 全称                                                              |
 | ----- | --------------------------------------------------------------- |
@@ -96,3 +97,7 @@ draft: true
 | NTFS  | New Technology File System                                      |
 | POSIX | Portable Operating System Interface<br>                         |
 | IEEE  | Institute of Electrical and Electronics Engineers               |
+| CFG   | ConFiGuration File                                              |
+| Saas  | Software as a service                                           |
+| BBC   | British Broadcasting Corporation                                |
+| ISE   | Intergrated Software Environment                                |

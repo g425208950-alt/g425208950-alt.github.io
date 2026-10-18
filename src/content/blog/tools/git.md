@@ -28,6 +28,32 @@ refs用来存放所有引用，heads放分支。
 | `git add -f <file>`         | 强制加入被 `.gitignore` 忽略的文件                   |
 | `git add -N <file>`         | 只登记意图（intent-to-add），让 `git diff` 能显示未跟踪文件 |
 | `git add --chmod=+x <file>` | 改文件权限位为可执行一并暂存                             |
+### diff
+| 指令                                    | 作用                             |
+| ------------------------------------- | ------------------------------ |
+| `git diff`                            | 工作区相对暂存区的改动                    |
+| `git diff --staged`（= `--cached`）     | 暂存区相对 HEAD 的改动，即“下次提交会提交什么”    |
+| `git diff HEAD`                       | 工作区 + 暂存区相对 HEAD 的全部改动         |
+| `git diff <commit>`                   | 工作区相对指定提交                      |
+| `git diff <a> <b>`                    | 两个提交（或分支、标签）之间的差异              |
+| `git diff <a>..<b>`                   | 同上，比较 a 和 b 两个端点               |
+| `git diff <a>...<b>`                  | 从 a、b 的共同祖先到 b 的差异，即 b 分支引入的改动 |
+| `git diff -- <path>`                  | 把比较范围限定到文件或目录                  |
+| `git diff --no-index <f1> <f2>`       | 比较两个任意文件，即使它们不在仓库里             |
+| `git diff --stat`                     | 只输出改动统计（文件数、增删行数）              |
+| `git diff --name-only`                | 只列出改动的文件名                      |
+| `git diff --name-status`              | 列出文件名与状态（A/M/D/R）              |
+| `git diff --numstat`                  | 与 `--stat` 相同，但输出机器可读的“增、删”数字  |
+| `git diff -w`（= `--ignore-all-space`） | 忽略空白差异                         |
+| `git diff -U<n>`                      | 设置上下文行数，默认 3                   |
+| `git diff --word-diff`                | 按词级别显示差异，适合长行                  |
+| `git diff --check`                    | 检查行尾空白、冲突标记等                   |
+| `git diff -M`                         | 检测重命名（R）而非删除+新增                |
+| `git diff --diff-filter=<字母>`         | 只看某类改动，如 `--diff-filter=AM`    |
+| `git diff --submodule=log`            | 子模块以提交日志形式展示                   |
+| `git diff -R`                         | 反向输出（旧变新变成新变旧）                 |
+| `git diff --binary`                   | 输出二进制补丁，可配合 `git apply`        |
+| `git diff > x.patch`                  | 导出为补丁文件                        |
 ### push
 HTTPS和SSH都同时支持clone和push，github在2021年弃用账号和密码后，https改用PAT(Personal Access Token)当密码。
 
@@ -43,6 +69,8 @@ HTTPS和SSH都同时支持clone和push，github在2021年弃用账号和密码�
 | `git push --dry-run`                   | 演练，不实际推送                               |
 | `git push --force-with-lease`          | 安全强推，远端被别人改过就拒绝                        |
 | `git push -f`                          | 强推，会覆盖远端，慎用                            |
+|                                        |                                        |
+push的`type`可以是one of `feat, fix, chore, ci, docs, style, refactor, perf, test` (来自开源项目Activity Watch)
 ### pull
 | 命令                     | 作用                    |
 | ---------------------- | --------------------- |
@@ -73,7 +101,7 @@ HTTPS和SSH都同时支持clone和push，github在2021年弃用账号和密码�
 
 从别的分支/提交取文件：`git checkout main -- file.txt`，把 main 里的这个文件拿过来覆盖当前工作区。
 
-|                                       |                                  |
+| 命令                                    | 作用                               |
 | ------------------------------------- | -------------------------------- |
 | `git checkout main`                   | 切分支（等价 `git switch main`）        |
 | `git checkout -b <name>`              | 新建并切换（等价 `git switch -c`）        |
@@ -256,7 +284,6 @@ HEAD是远程仓库的默认分支指针;
 2. 网页上点 Fork，然后 clone 你名下那份：
     
 
-
 ```
 git clone https://github.com/<你的用户名>/<repo>.git
 cd <repo>
@@ -298,3 +325,24 @@ GitHub 会在页面上给出 “Compare & pull request”，点进去写清楚�
     
 
 几个容易踩的点：fork 的 main 不会自动跟上游同步，要定期 `git fetch upstream`；PR 里混入别人提交通常是因为你在旧 main 上开了分支；提交信息写“fix bug”这种等于没写；大改动先开 issue 或 draft PR 问清楚，别写完才被发现方向不对。
+
+## GitHub搜索语法
+| 写法                      | 含义                                                 |
+| ----------------------- | -------------------------------------------------- |
+| `is:issue`              | 只要 issue（排除 PR）                                    |
+| `is:pr`                 | 只要 PR                                              |
+| `is:open` / `is:closed` | 打开 / 关闭                                            |
+| `is:merged`             | 已合并的 PR                                            |
+| `label:"help wanted"`   | 带指定标签（**有空格必须加引号**）                                |
+| `no:label`              | 没有任何标签                                             |
+| `author:用户名`            | 某人创建                                               |
+| `assignee:用户名`          | 指派给某人                                              |
+| `mentions:用户名`          | 正文里 @ 了谁                                           |
+| `comments:>=10`         | 评论数比较，支持 `>` `<` `>=` `<=` `n..m`                  |
+| `created:>2026-01-01`   | 创建日期，支持 `>2026-01-01` 和区间 `2026-01-01..2026-06-30` |
+| `updated:<2026-06-01`   | 最后更新日期                                             |
+| `repo:owner/name`       | 限定仓库，跨仓库搜索时必用                                      |
+| `org:ActivityWatch`     | 限定组织下所有仓库                                          |
+| `in:title` / `in:body`  | 只搜标题 / 只搜正文                                        |
+| `sort:updated-desc`     | 排序（`updated-desc`、`created-desc`、`comments-desc`）  |
+**排除用减号。** `-label:stale` 表示"不带 stale 标签"，`-author:foo` 排除某人。

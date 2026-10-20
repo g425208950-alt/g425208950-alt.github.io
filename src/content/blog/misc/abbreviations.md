@@ -101,3 +101,16 @@ draft: true
 | Saas  | Software as a service                                           |
 | BBC   | British Broadcasting Corporation                                |
 | ISE   | Intergrated Software Environment                                |
+| GUID  | Global Unique Indentifier                                       |
+| DOS   | Disk Operating System                                           |
+| CSM   | Compartibility Support Module                                   |
+| LBA   | Logical Block Address                                           |
+| HDD   | Hard Disk Drive                                                 |
+| BCD   | Binary Coded Decimal                                            |
+| MSR   | MicroSoct Reserved Partition                                    |
+| TPM   | Trusted Platform Module                                         |
+| PCR   | Platform Configuration Register                                 |
+| KEK   | Key Exchange Key                                                |
+| PK    | Platform Key                                                    |
+| db    | signature Database                                              |
+| dbx   | Forbidden Signature Database                                    |

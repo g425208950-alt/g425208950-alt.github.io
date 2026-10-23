@@ -10,6 +10,19 @@ refs用来存放所有引用，heads放分支。
 `tags/` 放标签，`remotes/` 放远程跟踪引用，还有 `notes/`、`stash/` 等。
 ### refs
 
+## 协议
+| 协议              | 类型           | 主要义务                   | 可闭源商用 | 典型项目                          |
+| --------------- | ------------ | ---------------------- | ----- | ----------------------------- |
+| MIT             | 宽松           | 保留版权与许可声明              | 可以    | React、Rails、jQuery            |
+| Apache 2.0      | 宽松           | 同上，另加显式专利授权、标注修改       | 可以    | Kubernetes、Android、TensorFlow |
+| BSD 2-Clause    | 宽松           | 保留版权与免责声明              | 可以    | nginx、FreeBSD                 |
+| BSD 3-Clause    | 宽松           | 再加"不得用作者名背书"           | 可以    | Go（旧版）、Redis（旧版 BSD）          |
+| MPL 2.0         | 文件级 copyleft | 修改过的文件须开源，其余可闭源        | 部分可以  | Firefox、Thunderbird           |
+| LGPL            | 弱 copyleft   | 动态链接不传染，改库本身须开源        | 可以    | glibc、Qt                      |
+| GPL v2          | 强 copyleft   | 分发即须以 GPL 开源并提供源码      | 不可以   | Linux 内核、Git                  |
+| GPL v3          | 强 copyleft   | 同上，加专利授权与反 Tivoization | 不可以   | Bash、GIMP                     |
+| AGPL v3         | 网络型 copyleft | 通过网络提供服务也算分发，须开源       | 不可以   | Grafana、MinIO                 |
+| Unlicense / CC0 | 公有领域         | 无义务                    | 可以    | SQLite（公有领域）                  |
 ## command
 `refs/heads/` 是本地分支，一个文件就是一个分支。存在即分支存在，`git branch -d` 就是删这个文件。
 `refs/tags/` 是标签。注意标签文件里可能直接存 tag 对象的哈希，一层套一层，所以要 `git show-ref --dereference` 剥开看真正的 commit。

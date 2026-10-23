@@ -30,3 +30,12 @@ MATE 和 LXQt 是更轻的复古选择，一般给低配机器用。
 Arch 上的装法是 metapackage：`plasma-meta`、`gnome`、`xfce4`，再配一个显示管理器。主题、图标、字体、输入法都是额外的东西。
 
 你这台是 Intel 核显 + RTX 4060 的双显卡，KDE 和 GNOME 的 Wayland 会话都能用，NVIDIA 只在 `prime-run` 拉起来的时候参与，桌面本身跑在核显上，所以不用担心独显驱动拖累 Wayland。
+
+```
+应用          Firefox、Obsidian、Konsole
+桌面环境      Plasma、GNOME                    ← 面板 + 设置 + 一整套应用
+合成器        KWin、Mutter、Hyprland、Niri、Sway  ← 画窗口、管输入、管屏幕
+显示协议      Wayland / X11
+内核          Linux
+发行版        Arch、CachyOS、Ubuntu             ← 打包分发上面所有东西
+```

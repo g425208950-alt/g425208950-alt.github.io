@@ -182,6 +182,47 @@ HEAD是远程仓库的默认分支指针;
 可以看到子仓库，索引为160000的条目就是gitlink。
 `100644`的前三位`100`是git的类型前缀，表示普通文件，644表示'rw-r--r--'
 `120000`是符号链接，160000是gitlink，子模块，040000表示目录(tree对象)，这个一般不出现在ls-files里。但是这些权限在windows里不生效。
+### rev-parse
+`git rev-parse` 的本职是把「版本写法」解析成对象哈希，比如 `git rev-parse HEAD`；它同时也是一堆查询仓库状态的开关，`--is-inside-work-tree` 就是其中一个。
+
+```bash
+git rev-parse --is-inside-work-tree
+```
+
+当前目录在某个工作树里就打印 `true`，否则打印 `false`：
+
+- 在 `.git/` 目录里执行 → `false`，那是 git 目录，不算工作树（要看这个用 `--is-inside-git-dir`）
+- 裸仓库（bare）里执行 → `false`
+- 压根不在仓库里 → 报 `fatal: not a git repository`，退出码 128，标准输出为空
+
+所以它常被脚本用来判断「现在是不是在一个能干活的工作区里」：
+
+```bash
+if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
+  echo "在工作区里"
+fi
+```
+
+`2>/dev/null` 是屏蔽不在仓库时的报错；只关心成败也可以直接看退出码：
+
+```bash
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 1
+```
+
+其他常用开关：
+
+| 命令                                  | 作用                        |
+| ----------------------------------- | ------------------------- |
+| `git rev-parse --show-toplevel`     | 仓库根目录的绝对路径                |
+| `git rev-parse --show-prefix`       | 当前目录相对根目录的路径，根目录为空串       |
+| `git rev-parse --git-dir`           | git 目录位置，通常是 `.git`       |
+| `git rev-parse --is-bare-repository` | 是否裸仓库                     |
+| `git rev-parse --is-inside-git-dir` | 当前是否在 git 目录里             |
+| `git rev-parse --abbrev-ref HEAD`   | 当前分支名，检出哈希时是 `HEAD`       |
+| `git rev-parse --short HEAD`        | 短哈希                       |
+| `git rev-parse --verify HEAD`       | 校验对象存在，不存在就返回非 0          |
+| `git rev-parse HEAD~2`              | 往前数两个提交的哈希                |
+
 ### status
 
 #### -sb

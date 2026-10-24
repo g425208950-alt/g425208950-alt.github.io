@@ -142,10 +142,13 @@ draft: true
 | ISE    | Integrated Scripting Environment                            |
 | CJK    | Chinese,Japanese,Korea                                      |
 | CJKV   | Chinese,Japanese,Korea,Vietnamese                           |
-| kcm    | Key Character Map                                           |
+|        |                                                             |
 | GTK    | GIMP ToolKit                                                |
 | GIMP   | GNU Image Manipulation Program Toolkit                      |
 | fcitx  | Free Chinese Input Toy of X/Flexible Input Method Framework |
 | ANSI   | American National Standards Institute                       |
 | ISO    | International Organization for Standardization              |
 | IOS    | iPhone Operating System                                     |
+| SDDM   | Simple Desktop Display Manager                              |
+| KCM    | KDE Control Module                                          |
+| toml   | Tom's Obvious, Minimal Language                             |

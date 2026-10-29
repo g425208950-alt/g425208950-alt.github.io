@@ -70,3 +70,78 @@ pandoc report.md -o report.pdf --pdf-engine=xelatex -V CJKmainfont="Microsoft Ya
 ```powershell
 powercfg /h off
 ```
+
+
+
+```
+ssh-keygen -p -a 100 -f $env:USERPROFILE\.ssh\id_rsa
+```
+
+
+### 第 1 步：装 pass
+
+bash
+
+```
+sudo pacman -S pass
+```
+
+会顺带拉 `gnupg`（已有）和 `tree`（`pass ls` 的渲染依赖）。git 你已经有了。
+
+### 第 2 步：让 pass 找到你的仓库
+
+`pass` 默认只认 `~/.password-store`，你的仓库叫 `my-password-repo`。两个办法：
+
+**推荐 —— 直接改名，少一个变量：**
+
+```
+mv ~/my-password-repo ~/.password-store
+```
+
+**或者设环境变量**（想保留原目录名时）：
+
+```
+echo 'export PASSWORD_STORE_DIR="$HOME/my-password-repo"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+改名之后 `PASSWORD_STORE_DIR` 可以不设，以后所有 `pass` 命令直接就能用。
+
+### 第 3 步：把 GPG 私钥从 WSL 导过来
+
+你的 `.gpg-id` 里写的是：
+
+```
+425208950@qq.com
+```
+
+这是加密目标密钥的 UID。解密必须有对应的私钥 —— 它在 WSL 的 `~/.gnupg` 里。
+
+**先在 WSL 里导出**（注意：`/mnt/d` 你在 Arch 侧是只读的，但在 WSL 里可写）：
+
+```
+gpg --list-secret-keys --keyid-format=long       # 确认密钥存在，记下 KEYID
+
+gpg --export-secret-keys --armor 425208950@qq.com > /mnt/d/gpg-secret.asc
+gpg --export-ownertrust > /mnt/d/gpg-ownertrust.txt
+```
+
+**然后在 Arch 里导入**（只读挂载不影响读取，直接 cp 就行）：
+
+```
+cp /mnt/d/gpg-secret.asc /mnt/d/gpg-ownertrust.txt ~/
+gpg --import ~/gpg-secret.asc
+gpg --import-ownertrust ~/gpg-ownertrust.txt
+
+gpg --list-secret-keys --keyid-format=long       # 应该能看到 425208950@qq.com
+```
+
+第二条（ownertrust）别省 —— 不导入的话 gpg 会一直警告密钥"不被信任"，有些操作会拒绝执行。
+
+**导完立刻删中转文件。** `--export-secret-keys` 导出的是**明文私钥**（除非你原密钥本身设了口令，那样导出的仍是口令保护的密文）：
+
+```
+rm -f ~/gpg-secret.asc ~/gpg-ownertrust.txt
+```
+
+`/mnt/d/` 下那两份要在 Windows 里删（Arch 侧只读）。

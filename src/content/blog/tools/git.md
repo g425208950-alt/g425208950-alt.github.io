@@ -237,6 +237,12 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 1
 `git config --global --unset http.proxy`
 `git config --global --unset https.proxy`
 
+```
+git config --global user.name "你的名字"
+git config --global user.email "you@example.com"
+git config --global init.defaultBranch main
+```
+
 #### 文件模式
 `git config core.fileMode false` 在Windows上应该设置为false，因为windows的文件系统ACL和Unix权限不同
 ### branch

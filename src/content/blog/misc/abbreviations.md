@@ -125,30 +125,56 @@ draft: true
 
 
 ## 未整理
-| 缩写     | 全称                                                          |
-| ------ | ----------------------------------------------------------- |
-| MMO    | Massive Multiplayer Online                                  |
-| rpm    | red hat package manager                                     |
-| pacman | Package Manager                                             |
-| Yay    | Yet Another Yogurt                                          |
-| BSD    | Berkeley Software Distribution                              |
-| KISS   | Keep It Simple, Stupid                                      |
-| PE     | Portable Executable/Physical Education                      |
-| WinPE  | Windows Preinstallation Environment                         |
-| WinRE  | Windows Recovery Environment                                |
-| .ocx   | Object Linking and Embedding Control eXtension              |
-| CVE    | Common Vulnerabilities and Exposures                        |
-| btrfs  | B-tree File System                                          |
-| ISE    | Integrated Scripting Environment                            |
-| CJK    | Chinese,Japanese,Korea                                      |
-| CJKV   | Chinese,Japanese,Korea,Vietnamese                           |
-|        |                                                             |
-| GTK    | GIMP ToolKit                                                |
-| GIMP   | GNU Image Manipulation Program Toolkit                      |
-| fcitx  | Free Chinese Input Toy of X/Flexible Input Method Framework |
-| ANSI   | American National Standards Institute                       |
-| ISO    | International Organization for Standardization              |
-| IOS    | iPhone Operating System                                     |
-| SDDM   | Simple Desktop Display Manager                              |
-| KCM    | KDE Control Module                                          |
-| toml   | Tom's Obvious, Minimal Language                             |
+| 缩写       | 全称                                                          |
+| -------- | ----------------------------------------------------------- |
+| MMO      | Massive Multiplayer Online                                  |
+| rpm      | red hat package manager                                     |
+| pacman   | Package Manager                                             |
+| Yay      | Yet Another Yogurt                                          |
+| BSD      | Berkeley Software Distribution                              |
+| KISS     | Keep It Simple, Stupid                                      |
+| PE       | Portable Executable/Physical Education                      |
+| WinPE    | Windows Preinstallation Environment                         |
+| WinRE    | Windows Recovery Environment                                |
+| .ocx     | Object Linking and Embedding Control eXtension              |
+| CVE      | Common Vulnerabilities and Exposures                        |
+| btrfs    | B-tree File System                                          |
+| ISE      | Integrated Scripting Environment                            |
+| CJK      | Chinese,Japanese,Korea                                      |
+| CJKV     | Chinese,Japanese,Korea,Vietnamese                           |
+|          |                                                             |
+| GTK      | GIMP ToolKit                                                |
+| GIMP     | GNU Image Manipulation Program Toolkit                      |
+| fcitx    | Free Chinese Input Toy of X/Flexible Input Method Framework |
+| ANSI     | American National Standards Institute                       |
+| ISO      | International Organization for Standardization              |
+| IOS      | iPhone Operating System                                     |
+| SDDM     | Simple Desktop Display Manager                              |
+| KCM      | KDE Control Module                                          |
+| toml     | Tom's Obvious, Minimal Language                             |
+| DRM      | Digital Rights Management                                   |
+| RPC      | Remote Procedure Call                                       |
+| VPS      | Virtual Private Server                                      |
+| VDS      | Virtual Dedicated Server                                    |
+| PAC      | Proxy Auto-Config                                           |
+| DoH      | DNS over HTTPS                                              |
+| DoT      | DNS over TLS (853端口)                                        |
+| UUID     | Universally Unique Identifier                               |
+| WoW64    | Windows 32-bit on Windows 64-bit                            |
+| DKMS     | Dynamic Kernel Module Support                               |
+| RSA      | Rivest-Shamir-Adleman非对称加密算法                                |
+| GPG      | GNU Privacy Guard                                           |
+| PGP      | Pretty Good Privacy                                         |
+| KDE      | Key Derivation Function（密钥派生函数）                             |
+| AES      | Advanced Encryption Standard                                |
+| KVM      | Kernel-based Virtual Machine                                |
+| PAC      | Proxy Auto-Config                                           |
+| WPAD     | Web Proxy Auto-Discovery                                    |
+| DHCP     | Dynamic Host Configuration Protocol                         |
+| JDG/JPEG | Joint Photographic Experts Group                            |
+| PNG      | Portable Network Graphics/PNG's Not GIF                     |
+| ttf      | TrueType Font                                               |
+| noto     | no-tofu                                                     |
+| QHD      | Quarter High Definition(2560 x 1440)                        |
+| FHD      | Full High Definition(1920 x 1080)                           |
+| UHD      | Ultra High Definition(3840 x 2160)                          |
